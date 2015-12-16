@@ -1,0 +1,9 @@
+**/*.min.js
+**/*.html
+test/index.html
+test/bundle.js
+dist/**
+lib/test/**
+**/libs/**
+node_modules/**
+bower_components/**
