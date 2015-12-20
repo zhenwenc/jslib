@@ -5,4 +5,4 @@ lib/test/*
 node_modules
 bower_components
 dist
-lib
+typings

@@ -1,8 +1,3 @@
-'use strict'
-
-import * as $ from './internal/util'
-import { check } from './check'
-
 /**
  * Returns a function that can be lazily evaluate the given function with the
  * given arguments.
@@ -18,8 +13,9 @@ import { check } from './check'
  * 		const f = N.lazy(Math.pow, 2, 4)
  *
  * 		f() // 2^4 = 16
+ *
+ * @deprecated
  */
-export function lazy(fn, ...args) {
-  check($.isFn(fn), `Expects function fn to lazify, but ${fn}`)
+export function lazy(fn: (...args: any[]) => any, ...args: any[]) {
   return () => fn.apply(fn, args)
 }

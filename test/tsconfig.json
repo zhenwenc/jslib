@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "outDir": "../dist/test",
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "sourceMap": true
+  },
+  "filesGlob": [
+    "./**/*.ts",
+    "../typings/**/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+  "files": [
+    "./FirstTest.ts",
+    "../typings/assertion-error/assertion-error.d.ts",
+    "../typings/chai/chai.d.ts",
+    "../typings/mocha/mocha.d.ts",
+    "../typings/tsd.d.ts"
+  ],
+  "atom": {
+    "rewriteTsconfig": true
+  }
+}

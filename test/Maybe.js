@@ -1,7 +1,6 @@
 'use strict'
 
 import N, { Maybe, Just, Nothing } from '../src/index'
-import should from 'should'
 
 const nothing = Nothing
 
