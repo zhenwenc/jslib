@@ -1,7 +1,7 @@
 {
-  "name": "ts-libs",
+  "name": "tsfp",
   "version": "1.0.0",
-  "description": "A bundle of functional sugars for JavaScript",
+  "description": "A collection of functional utility libraries for JS projects",
   "main": "lib/index.js",
   "directories": {
     "test": "test"
@@ -11,23 +11,24 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zhenwenc/ts-libs.git"
+    "url": "git+https://github.com/zhenwenc/tsfp.git"
   },
   "author": "Zhenwen Cai <frederickcai@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/zhenwenc/ts-libs/issues"
+    "url": "https://github.com/zhenwenc/tsfp/issues"
   },
-  "homepage": "https://github.com/zhenwenc/ts-libs#readme",
+  "homepage": "https://github.com/zhenwenc/tsfp#readme",
   "devDependencies": {
-    "chai": "^3.4.1",
-    "gulp": "^3.9.0",
+    "chai": "^3.5.0",
+    "gulp": "^3.9.1",
     "gulp-mocha": "^2.2.0",
     "gulp-notify": "^2.2.0",
     "gulp-rimraf": "^0.2.0",
-    "gulp-typescript": "^2.10.0",
+    "gulp-typescript": "^2.11.0",
     "gulp-watch": "^4.3.5",
-    "should": "^8.0.1",
-    "yargs": "^3.31.0"
+    "merge2": "^1.0.1",
+    "should": "^8.2.2",
+    "yargs": "^4.1.0"
   }
 }

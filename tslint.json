@@ -11,7 +11,7 @@
       "check-space",
       "check-uppercase"
     ],
-    "curly": true,
+    "curly": [false, "multi-line"],
     "eofline": true,
     "forin": true,
     "indent": [
@@ -34,7 +34,7 @@
     ],
     "no-any": false,
     "no-arg": true,
-    "no-bitwise": true,
+    "no-bitwise": false,
     "no-console": [
       true,
       "debug",
@@ -45,7 +45,7 @@
     ],
     "no-consecutive-blank-lines": true,
     "no-construct": true,
-    "no-constructor-vars": true,
+    "no-constructor-vars": false,
     "no-debugger": true,
     "no-duplicate-key": true,
     "no-duplicate-variable": true,
@@ -64,7 +64,6 @@
       true,
       "check-open-brace",
       "check-catch",
-      "check-else",
       "check-whitespace"
     ],
     "quotemark": [

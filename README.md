@@ -1,2 +1,3 @@
-# ts-libs
-A bundle of functional sugars for JavaScript!
+# tsfp
+
+A collection of functional utility libraries for JS projects!

@@ -1,13 +1,16 @@
 'use strict'
 
-import * as $ from './internal/util'
-import { check } from './check'
-import { error } from './error'
-import { Left, Right } from './Either'
+import { Either, Left, Right } from './Either'
 
 // -- Maybe Class -------------------------------------------------------------
 
-export class Maybe {
+export abstract class Maybe<T> {
+
+  protected value: T
+
+  constructor(value: T) {
+    this.value = value
+  }
 
   /**
    * Returns a `Just` instance with the given value.
@@ -15,8 +18,8 @@ export class Maybe {
    * @param  {Any}  value The value to wrap.
    * @return {Just}       Returns a `Just`
    */
-  static Just(value) {
-    return new _Just(value)
+  static Just<F>(value: F): JustWrapper<F> {
+    return new JustWrapper(value)
   }
 
   /**
@@ -24,8 +27,8 @@ export class Maybe {
    *
    * @return {Nothing} Returns the singleton `Nothing`.
    */
-  static get Nothing() {
-    return nothing
+  static get Nothing(): NothingWrapper {
+    return new NothingWrapper
   }
 
   /**
@@ -38,7 +41,7 @@ export class Maybe {
    * @return {Just|Nothing}       Returns `Nothing` if `value` is null or
    *                              undefined, else `Just`
    */
-  static of(value) {
+  static of<F>(value: F): Maybe<F> {
     return (value === null || value === undefined)
             ? Maybe.Nothing : Maybe.Just(value)
   }
@@ -50,9 +53,8 @@ export class Maybe {
    * @param  {Function} fn the function to be evaluated
    * @return {Maybe}
    */
-  static eval(fn) {
-    check($.isFn(fn), `Expects function to evaluate, but ${fn}`)
-    return Maybe.of(fn.call())
+  static eval<F>(fn: () => F): Maybe<F> {
+    return Maybe.of(fn.apply(undefined))
   }
 
   /**
@@ -61,7 +63,7 @@ export class Maybe {
    * @param  {Any}     value the value to check.
    * @return {Boolean}       Returns `true` if `value` is subtype of `Maybe`
    */
-  static isMaybe(value) {
+  static isMaybe(value: any): boolean {
     return value instanceof Maybe
   }
 
@@ -71,8 +73,8 @@ export class Maybe {
    * @param  {Any}     value The value to check.
    * @return {Boolean}
    */
-  static isJust(value) {
-    return value instanceof _Just
+  static isJust(value: any): boolean {
+    return value instanceof JustWrapper
   }
 
   /**
@@ -81,17 +83,17 @@ export class Maybe {
    * @param  {Any}     value The value to check.
    * @return {Boolean}
    */
-  static isNothing(value) {
-    return value instanceof _Nothing
+  static isNothing(value: any): boolean {
+    return value instanceof NothingWrapper
   }
 
   /**
    * Check if `value` is `Just`, and the contained value is defined.
    *
-   * @param  {any}     value The value to check.
+   * @param  {Maybe}   value The value to check.
    * @return {Boolean}
    */
-  static isEmpty(value) {
+  static isEmpty(value: Maybe<any>): boolean {
     return Maybe.isNothing(value)
       || value.get === null
       || value.get === undefined
@@ -105,13 +107,13 @@ export class Maybe {
    * @param  {Generator} gen a generator
    * @return {Maybe}
    */
-  static run(gen) {
+  static run<F>(gen: IterableIterator<Maybe<F>>): Maybe<F> {
     function next(value) {
       const result = gen.next(value)
       if (result.done) return result.value || Maybe.of(value)
       return result.value.flatMap(next)
     }
-    return next()
+    return next(null)
   }
 
   /**
@@ -119,7 +121,7 @@ export class Maybe {
    *
    * @return {Boolean} Returns `true` if this is a `Just` instance
    */
-  get isJust() {
+  get isJust(): boolean {
     return Maybe.isJust(this)
   }
 
@@ -128,7 +130,7 @@ export class Maybe {
    *
    * @return {Boolean} Returns `true` if this is a `Nothing` instance
    */
-  get isNothing() {
+  get isNothing(): boolean {
     return Maybe.isNothing(this)
   }
 
@@ -138,24 +140,24 @@ export class Maybe {
    *
    * @return {Boolean}
    */
-  get isEmpty() {
+  get isEmpty(): boolean {
     return Maybe.isEmpty(this)
   }
 
   /**
-   * Return the result of applying `fa` to the value of this `Maybe` if this is
-   * a `Just`. Otherwise, evaluates expression `fb`.
+   * Return the result of applying `f` to the value of this `Maybe` if this is
+   * a `Just`. Otherwise, evaluates expression `ifEmpty`.
    *
-   * @param  {Function} fa the function to apply if this is a `Just`
-   * @param  {Function} fb the expression to evaluete if this is a `Nothing`
-   * @return {Anny}
+   * @param  {Function} ifEmpty the expression to evaluete if this is a `Nothing`
+   * @param  {Function} f       the function to apply if this is a `Just`
+   * @return {Any}
    */
-  fold(fa, fb) {
-    return this.isJust ? fa(this.get) : fb()
+  fold<F>(ifEmpty: () => F, f: (T) => F): F {
+    return this.isJust ? f(this.get) : ifEmpty()
   }
 
   toString() {
-    return `Maybe(${this.__value})`
+    return `Maybe(${this.value})`
   }
 
   // -- Functions -------------------------------------------------------------
@@ -166,8 +168,10 @@ export class Maybe {
    * @return {Any}
    */
   get get() {
-    if (this.isNothing) throw Error(`Can't get value from Nothing.`)
-    else return this.__value
+    if (this.isNothing)
+      throw Error(`Can't get value from Nothing.`)
+    else
+      return this.value
   }
 
   /**
@@ -185,26 +189,23 @@ export class Maybe {
    * Returns the maybe's value if the maybe is a `Just`, otherwise throw the
    * given `err` which can be either custom error or any object.
    *
-   * @param  {Any}   err Rubbish to throw :)
+   * @param  {Error} err Rubbish to throw :)
    * @return {Any}
    */
-  getOrThrow(err) {
-    if (this.isJust) return this.get; else throw error(err)
+  getOrThrow(err: Error) {
+    if (this.isJust) return this.get
+    else throw err
   }
 
   /**
    * Returns this `Maybe` if it is a `Just`, otherwise return the result of
-   * evaluating `alt` or `alt` if it is not a function.
+   * evaluating `alt`.
    *
-   * @param  {Any} alt the alternative expression
-   * @return {Any}
+   * @param  {Function} alt the alternative expression
+   * @return {Maybe}
    */
-  orElse(alt) {
-    const rs = this.isNothing ? $.evals(alt) : this
-    if (!Maybe.isMaybe(this)) {
-      throw (new TypeError(`Return type of alternative must be Maybe, but ${alt}`))
-    }
-    return rs
+  orElse<F extends T>(alt: () => Maybe<F>): Maybe<T> {
+    return this.isNothing ? alt.apply(undefined) : this
   }
 
   /**
@@ -214,24 +215,22 @@ export class Maybe {
    * @param  {Function} fn the function to apply
    * @return {Maybe}
    */
-  map(fn) {
-    check($.isFn(fn), `Expects map function, but ${fn}`)
-    return this.isJust ? Just(fn(this.get)) : this
+  map<F>(fn: (T) => F): Maybe<F> {
+    return this.isJust ? Maybe.Just(fn(this.get)) : new NothingWrapper
   }
 
   /**
    * Returns the result of applying `fn` to the value of this `Maybe` if this is
-   * a `Just`. Returns `Nothing` if this is a `Nothing`. Slightly different from
-   * #map is that `fn` is expected to return a `Maybe` (which could be `Nothing`).
+   * a `Just`. Returns `Nothing` if this is a `Nothing`.
+   *
+   * Slightly different from `map` is that `fn` is expected to return a `Maybe`
+   * (which could be `Nothing`).
    *
    * @param  {Function} fn the function to apply
    * @return {Maybe}
    */
-  flatMap(fn) {
-    check($.isFn(fn), `Expects flatMap function, but ${fn}`)
-    const rs = this.isJust ? fn(this.get) : this
-    if (Maybe.isMaybe(rs)) return rs
-    else throw error(`Return type of fn must be Maybe, but ${rs}`)
+  flatMap<F>(fn: (T) => Maybe<F>): Maybe<F> {
+    return this.isJust ? fn(this.get) : new NothingWrapper
   }
 
   /**
@@ -244,64 +243,60 @@ export class Maybe {
    *
    * @return {Function}
    */
-  chain(fn) {
-    check($.isFn(fn), `Expects chain function, but ${fn}`)
-    return this.isJust ? (() => fn(this.get)) : (() => this)
+  chain<F>(fn: (T) => Maybe<F>): () => Maybe<F> {
+    return this.isJust ? (() => fn(this.get)) : (() => new NothingWrapper)
   }
 
   /**
-   * Return a {@link Right} containing this maybe's value if this is a
-   * {link @Just}, or a {@link Left} containing the given `left` if this
-   * is a {@link Nothing}.
+   * Return a `Right` containing this maybe's value if this is a `Just`, or
+   * a `Left` containing the given `left` if this is a `Nothing`.
    *
-   * @param  {Any}     left the value to return if this is a {@link Nothing}
+   * @param  {Any}     left the value to return if this is a Nothing
    * @param  {Boolean} ev   evaluate if `left` is a function
    * @return {Maybe}
    */
-  toRight(left) {
-    return this.isJust ? Right(this.get) : Left($.evals(left))
+  toRight<G>(left: G): Either<G, T> {
+    return this.isJust ? Right<G, T>(this.get) : Left<G, T>(left)
   }
 
   /**
-   * Return a {@link Left} containing this maybe's value if this is a
-   * {@link Nothing}, or a {@link Right} containing the given `right`
-   * if this is a {@link Just}.
+   * Return a `Left` containing this maybe's value if this is a `Nothing`,
+   * or a `Right` containing the given `right` if this is a `Just`.
    *
-   * @param  {Any}     right the value to return if this is a {@link Nothing}
+   * @param  {Any}     right the value to return if this is a `Nothing`
    * @param  {Boolean} ev    evaluate if `right` is a function
    * @return {Maybe}
    */
-  toLeft(right) {
-    return this.isJust ? Left(this.get) : Right($.evals(right))
+  toLeft<G>(right: G): Either<T, G> {
+    return this.isJust ? Left<T, G>(this.get) : Right<T, G>(right)
   }
 
 }
 
 // -- Just Class --------------------------------------------------------------
 
-class _Just extends Maybe {
+export class JustWrapper<T> extends Maybe<T> {
 
-  constructor(value) {
-    super()
-    this.__value = value
+  constructor(value: T) {
+    super(value)
   }
 
   toString() {
-    return `Just(${this.__value})`
+    return `Just(${this.value})`
   }
 
   equals(that) {
-    return Maybe.isJust(that) && that.__value === this.__value
+    return Maybe.isJust(that) && that.value === this.value
   }
 
 }
 
  // -- Nothing Class ----------------------------------------------------------
 
-class _Nothing extends Maybe {
+export class NothingWrapper extends Maybe<any> {
 
   constructor() {
-    super()
+    super(undefined)
   }
 
   toString() {
@@ -314,9 +309,8 @@ class _Nothing extends Maybe {
 
 }
 
-const nothing = new _Nothing
-
 // -- Aliases -----------------------------------------------------------------
 
+/* tslint:disable variable-name */
 export const Just = Maybe.Just
 export const Nothing = Maybe.Nothing
