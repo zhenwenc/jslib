@@ -9,15 +9,10 @@ const mocha   = require('gulp-mocha')
 const merge   = require('merge2')
 const args    = require('yargs').argv
 
-const project = tsc.createProject('tsconfig.json', {
-  declaration: true
-})
+const project = tsc.createProject('tsconfig.json')
 
 const mochaConfig = {
   reporter: 'spec',
-  globals: {
-    should: require('should')
-  },
   bail: !!args.bail,
 }
 
