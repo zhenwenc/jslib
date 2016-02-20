@@ -1,8 +1,5 @@
 /bower_components/
-/dist/gh-pages/
-/lib/bench/
 /lib/doc/
-/lib/sauce/
 /scripts/
 **/test/
 /.editorconfig

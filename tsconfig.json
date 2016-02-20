@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "declaration": true,
+    "jsx": "react",
+    "module": "commonjs",
+    "noLib": false,
+    "removeComments": false,
+    "rootDir": ".",
+    "sourceMap": true,
+    "sourceRoot": ".",
+    "target": "ES6",
+    "outDir": "dist",
+    "moduleResolution": "classic"
+  },
+  "filesGlob": [
+    "src/**/*.ts",
+    "test/**/*.ts",
+    "typings/**/*.d.ts"
+  ],
+  "atom": {
+    "rewriteTsconfig": true
+  },
+  "files": [
+    "src/Either.ts",
+    "src/index.ts",
+    "src/Maybe.ts",
+    "test/Either-test.ts",
+    "test/Maybe-test.ts",
+    "typings/assertion-error/assertion-error.d.ts",
+    "typings/chai/chai.d.ts",
+    "typings/mocha/mocha.d.ts",
+    "typings/tsd.d.ts"
+  ]
+}

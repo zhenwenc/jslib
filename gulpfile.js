@@ -1,64 +1,74 @@
 'use strict'
 
 const gulp    = require('gulp')
-const args    = require('yargs').argv
+const filter  = require('gulp-filter')
+const rimraf  = require('gulp-rimraf')
 const notify  = require('gulp-notify')
+const tsc     = require('gulp-typescript')
 const mocha   = require('gulp-mocha')
-const babel   = require('gulp-babel')
+const merge   = require('merge2')
+const args    = require('yargs').argv
 
-require('babel-register')
+const project = tsc.createProject('tsconfig.json', {
+  declaration: true
+})
+
+const mochaConfig = {
+  reporter: 'spec',
+  globals: {
+    should: require('should')
+  },
+  bail: !!args.bail,
+}
+
+// ----------------------------------------------------------------------------
+
+gulp.task('clean', () => {
+  return gulp.src(['dist', 'lib', 'coverage'], { read: false })
+    .pipe(rimraf())
+})
+
+gulp.task('build', ['clean'], () => {
+  const compiled = project.src()
+    .pipe(tsc(project))
+    .on('error', onError)
+
+  return merge([
+    compiled.dts.pipe(gulp.dest('dist')),
+    compiled.js.pipe(gulp.dest('dist')),
+  ])
+})
+
+gulp.task('package', ['build', 'test'], () => {
+  return gulp.src('dist/src/*')
+    .pipe(gulp.dest('lib'))
+})
+
+gulp.task('test', (done) => {
+  return gulp.src('dist/test/**/*.js', { read: false })
+    .pipe(mocha(mochaConfig))
+    .on('error', onError)
+})
+
+// ----------------------------------------------------------------------------
+
+gulp.task('watch:build', ['build'], () => {
+  gulp.watch(['src/**/*.{ts}'], ['build'])
+})
+
+gulp.task('watch:test', ['test'], () => {
+  gulp.watch(['dist/src/**', 'dist/test/**'], ['test'])
+})
+
+gulp.task('watch', ['watch:build', 'watch:test'])
+
+// ----------------------------------------------------------------------------
 
 function onError(error) {
-  var message = error.message || error || ''
-  if (error.filename) {
-    message += '\n' + error.filename.replace(process.cwd(), '')
-    if (error.location) {
-      message += ':' + error.location.first_line +
-                 ':' + error.location.first_column
-    }
-  }
   notify.onError({
     title: error.name || 'Error',
-    message: message,
+    message: error.message || error || '',
   })
   console.log(error.stack)
   this.emit('end')
 }
-
-gulp.task('clean', () => {
-  return gulp.src(['lib', 'dist', 'coverage'], { read: false })
-    .pipe(rimraf())
-})
-
-gulp.task('build:lib', () => {
-  return gulp.src('src/**/*.js')
-    .pipe(babel({
-      presets: ['es2015', 'stage-0', 'react'],
-    }))
-    .on('error', onError)
-    .pipe(gulp.dest('lib'))
-})
-
-gulp.task('build', ['build:lib'])
-
-gulp.task('test', () => {
-  return gulp.src('test/**/*.js', { read: false })
-    .pipe(mocha({
-      reporter: 'spec',
-      globals: {
-        should: require('should'),
-      },
-      bail: !!args.bail,
-    }))
-    .on('error', onError)
-})
-
-gulp.task('watch:build', ['build'], () => {
-  gulp.watch(['src/**'], ['build'])
-})
-
-gulp.task('watch:test', ['build', 'test'], () => {
-  gulp.watch(['lib/**', 'test/**'], ['test'])
-})
-
-gulp.task('watch', ['watch:build', 'watch:test'])
