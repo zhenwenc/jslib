@@ -1,30 +1,31 @@
 'use strict'
 
-const gulp    = require('gulp')
-const filter  = require('gulp-filter')
-const glob    = require('tsconfig-glob')
-const rimraf  = require('gulp-rimraf')
-const notify  = require('gulp-notify')
-const tsc     = require('gulp-typescript')
-const mocha   = require('gulp-mocha')
-const merge   = require('merge2')
-const args    = require('yargs').argv
+var gulp    = require('gulp')
+var babel   = require('gulp-babel')
+var filter  = require('gulp-filter')
+var rimraf  = require('gulp-rimraf')
+var notify  = require('gulp-notify')
+var tsc     = require('gulp-typescript')
+var mocha   = require('gulp-mocha')
+var glob    = require('tsconfig-glob')
+var merge   = require('merge2')
+var args    = require('yargs').argv
 
-const project = tsc.createProject('tsconfig.json')
+var project = tsc.createProject('tsconfig.json')
 
-const mochaConfig = {
+var mochaConfig = {
   reporter: 'spec',
   bail: !!args.bail,
 }
 
 // ----------------------------------------------------------------------------
 
-gulp.task('clean', () => {
+gulp.task('clean', function() {
   return gulp.src(['dist', 'lib', 'coverage'], { read: false })
     .pipe(rimraf())
 })
 
-gulp.task('prebuild', () => {
+gulp.task('prebuild', function() {
   return glob({
     configPath: '.',
     cwd: process.cwd(),
@@ -32,8 +33,8 @@ gulp.task('prebuild', () => {
   })
 })
 
-gulp.task('build', ['clean', 'prebuild'], () => {
-  const compiled = project.src()
+gulp.task('build', ['clean', 'prebuild'], function() {
+  var compiled = project.src()
     .pipe(tsc(project))
     .on('error', onError)
 
@@ -43,12 +44,20 @@ gulp.task('build', ['clean', 'prebuild'], () => {
   ])
 })
 
-gulp.task('package', ['build', 'test'], () => {
-  return gulp.src('dist/src/*')
-    .pipe(gulp.dest('lib'))
+gulp.task('package', ['build', 'test'], function() {
+  var scripts = gulp.src('dist/src/*.js')
+    .pipe(babel({
+      presets: ['es2015']
+    }))
+  var typings = gulp.src('dist/src/*.d.ts')
+
+  return merge([
+    scripts.pipe(gulp.dest('lib')),
+    typings.pipe(gulp.dest('lib'))
+  ])
 })
 
-gulp.task('test', (done) => {
+gulp.task('test', function(done) {
   return gulp.src('dist/test/**/*.js', { read: false })
     .pipe(mocha(mochaConfig))
     .on('error', onError)
@@ -56,11 +65,11 @@ gulp.task('test', (done) => {
 
 // ----------------------------------------------------------------------------
 
-gulp.task('watch:build', ['build'], () => {
+gulp.task('watch:build', ['build'], function() {
   gulp.watch(['src/**/*.{ts}'], ['build'])
 })
 
-gulp.task('watch:test', ['test'], () => {
+gulp.task('watch:test', ['test'], function() {
   gulp.watch(['dist/src/**', 'dist/test/**'], ['test'])
 })
 
