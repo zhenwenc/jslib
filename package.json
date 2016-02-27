@@ -35,6 +35,7 @@
     "lazypipe": "^1.0.1",
     "merge2": "^1.0.1",
     "should": "^8.2.2",
+    "tsconfig-glob": "^0.4.1",
     "yargs": "^4.1.0"
   }
 }

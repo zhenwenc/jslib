@@ -1,5 +1,6 @@
 logs
 *.log
+.tern-port
 coverage
 lib/test/*
 node_modules

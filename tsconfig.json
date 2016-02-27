@@ -10,29 +10,32 @@
     "rootDir": ".",
     "sourceMap": true,
     "sourceRoot": ".",
-    "target": "ES6",
+    "target": "es6",
     "outDir": "dist",
-    "moduleResolution": "classic"
+    "moduleResolution": "classic",
+    "noImplicitAny": false
   },
   "filesGlob": [
     "src/**/*.ts",
     "test/**/*.ts",
     "typings/**/*.d.ts",
-    "!typings/should/should.d.ts"
+    "node_modules/immutable/dist/immutable.d.ts",
+    "!typings/should/should.d.ts",
+    "!typings/tsd.d.ts"
   ],
   "atom": {
     "rewriteTsconfig": true
   },
   "files": [
-    "src/Either.ts",
-    "src/Maybe.ts",
-    "src/tsfp.ts",
-    "test/Either-test.ts",
-    "test/Maybe-test.ts",
     "typings/assertion-error/assertion-error.d.ts",
     "typings/chai/chai.d.ts",
     "typings/js-yaml/js-yaml.d.ts",
     "typings/mocha/mocha.d.ts",
-    "typings/tsd.d.ts"
+    "node_modules/immutable/dist/immutable.d.ts",
+    "src/Either.ts",
+    "src/Maybe.ts",
+    "src/tsfp.ts",
+    "test/Either-test.ts",
+    "test/Maybe-test.ts"
   ]
 }

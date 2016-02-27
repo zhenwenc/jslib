@@ -2,6 +2,7 @@
 
 const gulp    = require('gulp')
 const filter  = require('gulp-filter')
+const glob    = require('tsconfig-glob')
 const rimraf  = require('gulp-rimraf')
 const notify  = require('gulp-notify')
 const tsc     = require('gulp-typescript')
@@ -23,7 +24,15 @@ gulp.task('clean', () => {
     .pipe(rimraf())
 })
 
-gulp.task('build', ['clean'], () => {
+gulp.task('prebuild', () => {
+  return glob({
+    configPath: '.',
+    cwd: process.cwd(),
+    indent: 2,
+  })
+})
+
+gulp.task('build', ['clean', 'prebuild'], () => {
   const compiled = project.src()
     .pipe(tsc(project))
     .on('error', onError)
