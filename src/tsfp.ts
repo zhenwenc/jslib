@@ -1,2 +1,2 @@
-export * from './Maybe'
-export * from './Either'
+export * from './core/Maybe'
+export * from './core/Either'

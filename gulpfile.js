@@ -1,15 +1,16 @@
 'use strict'
 
-var gulp    = require('gulp')
-var babel   = require('gulp-babel')
-var filter  = require('gulp-filter')
-var rimraf  = require('gulp-rimraf')
-var notify  = require('gulp-notify')
-var tsc     = require('gulp-typescript')
-var mocha   = require('gulp-mocha')
-var glob    = require('tsconfig-glob')
-var merge   = require('merge2')
-var args    = require('yargs').argv
+var gulp       = require('gulp')
+var babel      = require('gulp-babel')
+var filter     = require('gulp-filter')
+var preprocess = require('gulp-preprocess')
+var rimraf     = require('gulp-rimraf')
+var notify     = require('gulp-notify')
+var tsc        = require('gulp-typescript')
+var mocha      = require('gulp-mocha')
+var glob       = require('tsconfig-glob')
+var merge      = require('merge2')
+var args       = require('yargs').argv
 
 var project = tsc.createProject('tsconfig.json')
 
@@ -33,7 +34,7 @@ gulp.task('prebuild', function() {
   })
 })
 
-gulp.task('build', ['clean', 'prebuild'], function() {
+gulp.task('build', ['clean', 'prebuild'], function(done) {
   var compiled = project.src()
     .pipe(tsc(project))
     .on('error', onError)
@@ -44,12 +45,14 @@ gulp.task('build', ['clean', 'prebuild'], function() {
   ])
 })
 
-gulp.task('package', ['build', 'test'], function() {
+gulp.task('package', ['build', 'test'], function(done) {
   var scripts = gulp.src('dist/src/*.js')
     .pipe(babel({
       presets: ['es2015']
     }))
-  var typings = gulp.src('dist/src/*.d.ts')
+  var typings = gulp.src([
+    'dist/src/**/*.d.ts',
+  ])
 
   return merge([
     scripts.pipe(gulp.dest('lib')),
@@ -66,11 +69,11 @@ gulp.task('test', function(done) {
 // ----------------------------------------------------------------------------
 
 gulp.task('watch:build', ['build'], function() {
-  gulp.watch(['src/**/*.{ts}'], ['build'])
+  gulp.watch(['src/**/*.ts', 'test/**/*.ts'], ['build'])
 })
 
 gulp.task('watch:test', ['test'], function() {
-  gulp.watch(['dist/src/**', 'dist/test/**'], ['test'])
+  gulp.watch(['dist/**/*.js'], ['test'])
 })
 
 gulp.task('watch', ['watch:build', 'watch:test'])

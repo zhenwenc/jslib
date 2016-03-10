@@ -27,15 +27,20 @@
     "rewriteTsconfig": true
   },
   "files": [
+    "src/helpers/ChaiModel-ext.d.ts",
     "typings/assertion-error/assertion-error.d.ts",
     "typings/chai/chai.d.ts",
     "typings/js-yaml/js-yaml.d.ts",
+    "typings/lodash/lodash.d.ts",
     "typings/mocha/mocha.d.ts",
     "node_modules/immutable/dist/immutable.d.ts",
-    "src/Either.ts",
-    "src/Maybe.ts",
+    "src/core/Either.ts",
+    "src/core/Maybe.ts",
+    "src/helpers/ChaiModel.ts",
+    "src/helpers/ImmutableHelper.ts",
     "src/tsfp.ts",
-    "test/Either-test.ts",
-    "test/Maybe-test.ts"
+    "test/core/EitherTest.ts",
+    "test/core/MaybeTest.ts",
+    "test/helpers/ChaiModelTest.ts"
   ]
 }
