@@ -60,8 +60,8 @@ gulp.task('package', ['build', 'test'], function(done) {
   ])
 })
 
-gulp.task('test', function(done) {
-  return gulp.src('dist/test/**/*.js', { read: false })
+gulp.task('test', ['build'], function(done) {
+  return gulp.src('dist/test/**/*\.spec\.js', { read: false })
     .pipe(mocha(mochaConfig))
     .on('error', onError)
 })
@@ -73,10 +73,8 @@ gulp.task('watch:build', ['build'], function() {
 })
 
 gulp.task('watch:test', ['test'], function() {
-  gulp.watch(['dist/**/*.js'], ['test'])
+  gulp.watch(['src/**/*.ts', 'test/**/*.ts'], ['test'])
 })
-
-gulp.task('watch', ['watch:build', 'watch:test'])
 
 // ----------------------------------------------------------------------------
 

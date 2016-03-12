@@ -43,8 +43,9 @@
     "src/utils/Hash.ts",
     "src/utils/Immutable.ts",
     "src/utils/Math.ts",
-    "test/core/EitherTest.ts",
-    "test/core/MaybeTest.ts",
-    "test/helpers/ChaiModelTest.ts"
+    "test/core/Either.spec.ts",
+    "test/core/Maybe.spec.ts",
+    "test/helpers/ChaiModel.spec.ts",
+    "test/utils/Hash.spec.ts"
   ]
 }
