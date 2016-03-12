@@ -1,7 +1,7 @@
 import { is as immutableEq } from  'immutable'
 import { isImmutable } from './Immutable'
 
-export default function deepEqual(a, b): boolean {
+export function deepEqual(a, b): boolean {
   if (a === b) {
     return true
   }
