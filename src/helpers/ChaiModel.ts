@@ -8,7 +8,7 @@
 
 import * as _ from 'lodash'
 import { Iterable, List } from 'immutable'
-import { isSet, isList, isStack } from './ImmutableHelper'
+import { isSet, isList, isStack } from '../utils/Immutable'
 
 type KeyedIterable = Iterable.Keyed<string | number, any>
 
@@ -18,7 +18,7 @@ const asIterable = (o: any) => o as Iterable<any, any>
 const isKeyedIterable = Iterable.isKeyed
 const asKeyedIterable = (o: any) => o as Iterable.Keyed<any, any>
 
-export function plugin(chai: any, utils: any): any {
+export function ChaiModel(chai: any, utils: any): any {
 
   /* tslint:disable variable-name */
   const Assertion = chai.Assertion

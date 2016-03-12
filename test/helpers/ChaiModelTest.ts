@@ -3,8 +3,8 @@
 import { expect, use } from 'chai'
 import { Map, List, OrderedSet, Set, Stack } from 'immutable'
 
-import { plugin } from '../../src/helpers/ChaiModel'
-use(plugin)
+import { ChaiModel } from '../../src/helpers/ChaiModel'
+use(ChaiModel)
 
 describe('ChaiSpec', () => {
 
