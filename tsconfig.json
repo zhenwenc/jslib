@@ -1,51 +1,52 @@
 {
-  "compilerOptions": {
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "declaration": true,
-    "jsx": "react",
-    "module": "commonjs",
-    "noLib": false,
-    "removeComments": false,
-    "rootDir": ".",
-    "sourceMap": true,
-    "sourceRoot": ".",
-    "target": "es6",
-    "outDir": "dist",
-    "moduleResolution": "classic",
-    "noImplicitAny": false
-  },
-  "filesGlob": [
-    "src/**/*.ts",
-    "test/**/*.ts",
-    "typings/**/*.d.ts",
-    "node_modules/immutable/dist/immutable.d.ts",
-    "!typings/should/should.d.ts",
-    "!typings/tsd.d.ts"
-  ],
-  "atom": {
-    "rewriteTsconfig": true
-  },
-  "files": [
-    "src/helpers/ChaiModel-ext.d.ts",
-    "typings/assertion-error/assertion-error.d.ts",
-    "typings/chai/chai.d.ts",
-    "typings/js-yaml/js-yaml.d.ts",
-    "typings/lodash/lodash.d.ts",
-    "typings/mocha/mocha.d.ts",
-    "node_modules/immutable/dist/immutable.d.ts",
-    "src/core/Either.ts",
-    "src/core/Maybe.ts",
-    "src/helpers.ts",
-    "src/helpers/ChaiModel.ts",
-    "src/main.ts",
-    "src/utils.ts",
-    "src/utils/Hash.ts",
-    "src/utils/Immutable.ts",
-    "src/utils/Math.ts",
-    "test/core/Either.spec.ts",
-    "test/core/Maybe.spec.ts",
-    "test/helpers/ChaiModel.spec.ts",
-    "test/utils/Hash.spec.ts"
-  ]
+    "compilerOptions": {
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "declaration": true,
+        "jsx": "react",
+        "module": "commonjs",
+        "noLib": false,
+        "removeComments": false,
+        "rootDir": ".",
+        "sourceMap": true,
+        "sourceRoot": ".",
+        "target": "es6",
+        "outDir": "dist",
+        "moduleResolution": "classic",
+        "noImplicitAny": false
+    },
+    "filesGlob": [
+        "src/**/*.ts",
+        "test/**/*.ts",
+        "typings/**/*.d.ts",
+        "node_modules/immutable/dist/immutable.d.ts",
+        "!typings/should/should.d.ts",
+        "!typings/tsd.d.ts"
+    ],
+    "atom": {
+        "rewriteTsconfig": true
+    },
+    "files": [
+        "src/helpers/ChaiModel-ext.d.ts",
+        "typings/assertion-error/assertion-error.d.ts",
+        "typings/chai/chai.d.ts",
+        "typings/js-yaml/js-yaml.d.ts",
+        "typings/lodash/lodash.d.ts",
+        "typings/mocha/mocha.d.ts",
+        "node_modules/immutable/dist/immutable.d.ts",
+        "src/core/Either.ts",
+        "src/core/Maybe.ts",
+        "src/helpers.ts",
+        "src/helpers/ChaiModel.ts",
+        "src/main.ts",
+        "src/utils.ts",
+        "src/utils/Equals.ts",
+        "src/utils/Hash.ts",
+        "src/utils/Immutable.ts",
+        "src/utils/Math.ts",
+        "test/core/Either.spec.ts",
+        "test/core/Maybe.spec.ts",
+        "test/helpers/ChaiModel.spec.ts",
+        "test/utils/Hash.spec.ts"
+    ]
 }
