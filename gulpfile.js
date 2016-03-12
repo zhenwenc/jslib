@@ -46,7 +46,7 @@ gulp.task('build', ['clean', 'prebuild'], function(done) {
 })
 
 gulp.task('package', ['build', 'test'], function(done) {
-  var scripts = gulp.src('dist/src/*.js')
+  var scripts = gulp.src('dist/src/**/*.js')
     .pipe(babel({
       presets: ['es2015']
     }))
