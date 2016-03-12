@@ -145,24 +145,6 @@ export abstract class Maybe<T> {
   }
 
   /**
-   * Return the result of applying `f` to the value of this `Maybe` if this is
-   * a `Just`. Otherwise, evaluates expression `ifEmpty`.
-   *
-   * @param  {Function} ifEmpty the expression to evaluete if this is a `Nothing`
-   * @param  {Function} f       the function to apply if this is a `Just`
-   * @return {Any}
-   */
-  fold<F>(ifEmpty: () => F, f: (T) => F): F {
-    return this.isJust ? f(this.get) : ifEmpty()
-  }
-
-  toString() {
-    return `Maybe(${this.value})`
-  }
-
-  // -- Functions -------------------------------------------------------------
-
-  /**
    * Returns the maybe's value.
    *
    * @return {Any}
@@ -173,6 +155,12 @@ export abstract class Maybe<T> {
     else
       return this.value
   }
+
+  toString() {
+    return `Maybe(${this.value})`
+  }
+
+  // -- Functions -------------------------------------------------------------
 
   /**
    * Returns the maybe's value if the maybe is a `Just`, otherwise return the
@@ -231,6 +219,18 @@ export abstract class Maybe<T> {
    */
   flatMap<F>(fn: (T) => Maybe<F>): Maybe<F> {
     return this.isJust ? fn(this.get) : new NothingWrapper
+  }
+
+  /**
+   * Return the result of applying `f` to the value of this `Maybe` if this is
+   * a `Just`. Otherwise, evaluates expression `ifEmpty`.
+   *
+   * @param  {Function} ifEmpty the expression to evaluete if this is a `Nothing`
+   * @param  {Function} f       the function to apply if this is a `Just`
+   * @return {Any}
+   */
+  fold<F>(ifEmpty: () => F, f: (T) => F): F {
+    return this.isJust ? f(this.get) : ifEmpty()
   }
 
   /**
