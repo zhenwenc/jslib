@@ -8,6 +8,8 @@
 
 import * as _ from 'lodash'
 import { Iterable, List } from 'immutable'
+import { canEquals } from '../core/Equals'
+import { deepEqual } from '../utils/deepEqual'
 import { isSet, isList, isStack } from '../utils/Immutable'
 
 type KeyedIterable = Iterable.Keyed<string | number, any>
@@ -85,6 +87,16 @@ export function ChaiModel(chai: any, utils: any): any {
           _.isEqual(actual.toJS(), expected.toJS()),
           'expected immutable #{act} to equal #{exp}',
           'expected immutable #{act} to not equal #{exp}',
+          expected, actual, true
+        )
+      }
+      else if (canEquals(expected) && canEquals(this._obj)) {
+        const actual = this._obj
+
+        this.assert(
+          deepEqual(actual, expected),
+          'expected #{act} to equal #{exp}',
+          'expected #{act} to not equal #{exp}',
           expected, actual, true
         )
       }

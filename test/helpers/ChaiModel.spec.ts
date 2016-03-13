@@ -3,6 +3,8 @@
 import { expect, use } from 'chai'
 import { Map, List, OrderedSet, Set, Stack } from 'immutable'
 
+import { Just, Nothing } from '../../src/core/Maybe'
+import { Left, Right } from '../../src/core/Either'
 import { ChaiModel } from '../../src/helpers/ChaiModel'
 use(ChaiModel)
 
@@ -49,6 +51,37 @@ describe('ChaiSpec', () => {
     })
     it('should not check if either given value is not immutable', () => {
       expect(List.of(1, 2)).to.not.eq([1, 2])
+    })
+    it('should check Maybe with JS object correctly', () => {
+      expect(Just(1)).to.eq(Just(1))
+      expect(Just('foo')).to.eq(Just('foo'))
+      expect(Just(false)).to.eq(Just(false))
+      expect(Just({ x: 'bar' })).to.eq(Just({ x: 'bar' }))
+    })
+    it('should check Maybe with immutable collection correctly', () => {
+      expect(Just(List[1, 2])).to.eq(Just(List[1, 2]))
+      expect(Just(Set([1, 2]))).to.eq(Just(Set([1, 2])))
+      expect(Just(Stack([1, 2]))).to.eq(Just(Stack([1, 2])))
+      expect(Just(Map({ x: 'foo' }))).to.eq(Just(Map({ x: 'foo' })))
+    })
+    it('should check Nothing correctly', () => {
+      expect(Nothing).to.eq(Nothing)
+    })
+    it('should check Either.Right with JS object correctly', () => {
+      expect(Right<Error, number>(1)).to.eq(Right<Error, number>(1))
+      expect(Right<Error, string>('foo')).to.eq(Right<Error, string>('foo'))
+      expect(Right<Error, boolean>(true)).to.eq(Right<Error, boolean>(true))
+      expect(Right<Error, {[idx: string]: number}>({
+        x: Math.PI
+      })).to.eq(Right<Error, {[idx: string]: number}>({
+        x: Math.PI
+      }))
+    })
+    it('should check Either.Left correctly', () => {
+      expect(Left<Error, number>(new Error('foo'))).to
+        .eq(Left<Error, number>(new Error('foo')))
+      expect(Left<TypeError, number>(new TypeError('bar'))).to
+        .eq(Left<TypeError, number>(new TypeError('bar')))
     })
   })
 
