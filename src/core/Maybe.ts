@@ -172,7 +172,7 @@ export abstract class Maybe<T> extends Equals {
    * @param  {Any} or the default expression
    * @return {Any}
    */
-  getOrElse(or) {
+  getOrElse(or: T) {
     return this.isNothing ? or : this.get
   }
 
