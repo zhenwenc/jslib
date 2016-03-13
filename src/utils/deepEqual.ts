@@ -1,4 +1,6 @@
+import { isEqual } from 'lodash'
 import { is as immutableEq } from  'immutable'
+import { canEquals } from '../core/Equals'
 import { isImmutable } from './Immutable'
 
 export function deepEqual(a, b): boolean {
@@ -6,9 +8,13 @@ export function deepEqual(a, b): boolean {
     return true
   }
 
+  if (canEquals(a) && canEquals(b)) {
+    return a.equals(b)
+  }
+
   if (isImmutable(a) && isImmutable(b)) {
     return immutableEq(a, b)
   }
 
-  return Object.is(a, b)
+  return isEqual(a, b)
 }

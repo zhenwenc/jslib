@@ -1,3 +1,5 @@
+// https://typescript.codeplex.com/discussions/401501
+
 'use strict'
 
 import { Iterable } from 'immutable'
@@ -32,16 +34,35 @@ export function isStack(thing: any) {
   )
 }
 
-export function isOrderedSet(thing: any) {
+export function isKeyed(thing: any) {
+  return Boolean(
+    thing instanceof Iterable
+    && thing['@@__IMMUTABLE_KEYED__@@']
+  )
+}
+
+export function isIndexed(thing: any) {
+  return Boolean(
+    thing instanceof Iterable
+    && thing['@@__IMMUTABLE_INDEXED__@@']
+  )
+}
+
+export function isOrdered(thing: any) {
   return Boolean(
     thing instanceof Iterable
     && thing['@@__IMMUTABLE_ORDERED__@@']
+  )
+}
+
+export function isOrderedSet(thing: any) {
+  return Boolean(
+    isOrdered(thing)
     && thing.hasOwnProperty('__hash'))
 }
 
 export function isOrderedMap(thing: any) {
   return Boolean(
-    thing instanceof Iterable
-    && thing['@@__IMMUTABLE_ORDERED__@@']
+    isOrdered(thing)
     && !thing.hasOwnProperty('__hash'))
 }

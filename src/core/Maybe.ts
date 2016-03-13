@@ -1,14 +1,17 @@
 'use strict'
 
 import { Either, Left, Right } from './Either'
+import { Equals } from './Equals'
+import { deepEqual } from '../utils/deepEqual'
 
 // -- Maybe Class -------------------------------------------------------------
 
-export abstract class Maybe<T> {
+export abstract class Maybe<T> extends Equals {
 
   protected value: T
 
   constructor(value: T) {
+    super()
     this.value = value
   }
 
@@ -285,8 +288,9 @@ export class JustWrapper<T> extends Maybe<T> {
     return `Just(${this.value})`
   }
 
-  equals(that) {
-    return Maybe.isJust(that) && that.value === this.value
+  equals(that: any) {
+    return Maybe.isJust(that)
+      && deepEqual(that.value, this.value)
   }
 
 }
@@ -303,7 +307,7 @@ export class NothingWrapper extends Maybe<any> {
     return 'Nothing'
   }
 
-  equals(that) {
+  equals(that: any) {
     return Maybe.isNothing(that)
   }
 

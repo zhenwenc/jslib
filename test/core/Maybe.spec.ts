@@ -52,6 +52,11 @@ describe('maybe', () => {
       expect(Just(value).get).to.be.eql(value)
     })
 
+    it('#equals: should compare other instance correctly', () => {
+      expect(Just({ a: 'foo' }).equals(Just({ a: 'foo' }))).to.be.true
+      expect(Just({ a: 'foo' }) === (Just({ a: 'foo' }))).to.be.false
+    })
+
     it('#getOrElse: should always return the original value', () => {
       expect(Just('Here').getOrElse('There')).to.be.eql('Here')
       expect(Just(null).getOrElse('Some')).to.be.null
@@ -88,6 +93,12 @@ describe('maybe', () => {
 
     it('#get: should throw error of no element', () => {
       expect(() => Nothing.get).to.throw(/Can't get value from Nothing\./)
+    })
+
+    it('#equals: should compare other instance correctly', () => {
+      expect(Nothing.equals(Nothing)).to.be.true
+      // TODO: should we allow this rule?
+      expect(Nothing === (Nothing)).to.be.true
     })
 
     it('#getOrElse: should always return the given default value', () => {
