@@ -70,7 +70,7 @@ export abstract class Either<A, B> extends Record {
    * @param  {Function} fb the function to apply if this is a `Right`
    * @return {Any}         the results of applying the function
    */
-  fold<X, Y>(fa: (A) => X, fb: (B) => Y) {
+  fold<X, Y>(fa: (a: A) => X, fb: (b: B) => Y) {
     return this.isLeft ? fa(this.a) : fb(this.b)
   }
 }
@@ -156,7 +156,7 @@ export class LeftProjection<A, B> extends Record {
    * @param  {Function} fn The function to map
    * @return {Either}
    */
-  map<X>(fn: (A) => X): Either<X, B> {
+  map<X>(fn: (a: A) => X): Either<X, B> {
     return this.e.isLeft
       ? Either.Left<X, B>(fn(this.get))
       : Either.Right<X, B>(this.e.right.get)
@@ -170,7 +170,7 @@ export class LeftProjection<A, B> extends Record {
    * @param  {Function} fn The function to bind accross the `Left`
    * @return {Either}
    */
-  flatMap<X>(fn: (A) => Either<X, B>): Either<X, B> {
+  flatMap<X>(fn: (a: A) => Either<X, B>): Either<X, B> {
     return this.e.isLeft ? fn(this.get) : Either.Right<X, B>(this.e.right.get)
   }
 
@@ -229,7 +229,7 @@ export class RightProjection<A, B> extends Record {
    * @param  {Function} fn The function to map
    * @return {Either}
    */
-  map<X>(fn: (A) => X): Either<A, X> {
+  map<X>(fn: (b: B) => X): Either<A, X> {
     return this.e.isRight
       ? Either.Right<A, X>(fn(this.get))
       : Either.Left<A, X>(this.e.left.get)
@@ -243,7 +243,7 @@ export class RightProjection<A, B> extends Record {
    * @param  {Function} fn The function to bind accross the `Right`
    * @return {Either}
    */
-  flatMap<X>(fn: (A) => Either<A, X>): Either<A, X> {
+  flatMap<X>(fn: (b: B) => Either<A, X>): Either<A, X> {
     return this.e.isRight ? fn(this.get) : Either.Left<A, X>(this.e.left.get)
   }
 

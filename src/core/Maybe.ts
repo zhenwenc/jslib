@@ -206,7 +206,7 @@ export abstract class Maybe<T> extends Record {
    * @param  {Function} fn the function to apply
    * @return {Maybe}
    */
-  map<F>(fn: (T) => F): Maybe<F> {
+  map<F>(fn: (t: T) => F): Maybe<F> {
     return this.isJust ? Maybe.Just(fn(this.get)) : new NothingWrapper
   }
 
@@ -220,7 +220,7 @@ export abstract class Maybe<T> extends Record {
    * @param  {Function} fn the function to apply
    * @return {Maybe}
    */
-  flatMap<F>(fn: (T) => Maybe<F>): Maybe<F> {
+  flatMap<F>(fn: (t: T) => Maybe<F>): Maybe<F> {
     return this.isJust ? fn(this.get) : new NothingWrapper
   }
 
@@ -232,7 +232,7 @@ export abstract class Maybe<T> extends Record {
    * @param  {Function} f       the function to apply if this is a `Just`
    * @return {Any}
    */
-  fold<F>(ifEmpty: () => F, f: (T) => F): F {
+  fold<F>(ifEmpty: () => F, f: (t: T) => F): F {
     return this.isJust ? f(this.get) : ifEmpty()
   }
 
