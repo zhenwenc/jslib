@@ -2,13 +2,13 @@
 
 /* tslint:disable:no-unused-variable */
 import { Maybe, Just, Nothing, NothingWrapper } from './Maybe'
-import { Equals } from './Equals'
+import { Record } from './Record'
 import { deepEqual } from '../utils/deepEqual'
 /* tslint:enable:no-unused-variable */
 
 // -- Either Class ------------------------------------------------------------
 
-export abstract class Either<A, B> extends Equals {
+export abstract class Either<A, B> extends Record {
 
   constructor(public a: A, public b: B) {
     super()
@@ -109,7 +109,7 @@ class RightWrapper<A, B> extends Either<A, B> {
 
 // -- Left / Right Projection Class -------------------------------------------
 
-export class LeftProjection<A, B> extends Equals {
+export class LeftProjection<A, B> extends Record {
   constructor(private e: Either<A, B>) { super() }
 
   /**
@@ -182,7 +182,7 @@ export class LeftProjection<A, B> extends Equals {
   toString() { return `LeftProjection(${this.e})` }
 }
 
-export class RightProjection<A, B> extends Equals {
+export class RightProjection<A, B> extends Record {
   constructor(private e: Either<A, B>) { super() }
 
   /**

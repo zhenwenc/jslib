@@ -1,12 +1,12 @@
 'use strict'
 
 import { Either, Left, Right } from './Either'
-import { Equals } from './Equals'
+import { Record } from './Record'
 import { deepEqual } from '../utils/deepEqual'
 
 // -- Maybe Class -------------------------------------------------------------
 
-export abstract class Maybe<T> extends Equals {
+export abstract class Maybe<T> extends Record {
 
   protected value: T
 
