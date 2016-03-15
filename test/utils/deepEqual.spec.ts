@@ -81,6 +81,13 @@ describe('deepEqual', () => {
       expect(deepEqual(new Foo(new Bar('baz')), new Foo(new Bar('baz')))).to.be.true
       expect(deepEqual(new Foo(new Bar('baz')), new Foo(new Bar('qux')))).to.be.false
     })
+    // Note: this is a guard for compatibility with ImmutableJS, if this
+    //       test case failed then you should check if the comparison
+    //       logic for Iterable in ImmutableJS is changed.
+    it('should compare nested immutable collection of Records', () => {
+      expect(deepEqual(List([new Foo(1)]), List([new Foo(1)]))).to.be.true
+      expect(deepEqual(List([new Foo(1)]), List([new Foo(0)]))).to.be.false
+    })
     it('should compare nested Record and immutable object (2 layer)', () => {
       expect(deepEqual(new Foo(List([1, 2])), new Foo(List([1, 2])))).to.be.true
       expect(deepEqual(new Foo(List([1, 2])), new Foo(List([1, 3])))).to.be.false
