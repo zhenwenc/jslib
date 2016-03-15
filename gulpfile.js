@@ -3,6 +3,7 @@
 var gulp       = require('gulp')
 var babel      = require('gulp-babel')
 var filter     = require('gulp-filter')
+var flatten    = require('gulp-flatten')
 var preprocess = require('gulp-preprocess')
 var rimraf     = require('gulp-rimraf')
 var notify     = require('gulp-notify')
@@ -50,13 +51,13 @@ gulp.task('package', ['build', 'test'], function(done) {
     .pipe(babel({
       presets: ['es2015']
     }))
-  var typings = gulp.src([
-    'dist/src/**/*.d.ts',
-  ])
+  var typings = gulp.src('dist/src/**/*.d.ts')
+  var customs = gulp.src('src/**/*-ext.d.ts').pipe(flatten())
 
   return merge([
     scripts.pipe(gulp.dest('lib')),
-    typings.pipe(gulp.dest('lib'))
+    typings.pipe(gulp.dest('lib')),
+    customs.pipe(gulp.dest('lib')),
   ])
 })
 
