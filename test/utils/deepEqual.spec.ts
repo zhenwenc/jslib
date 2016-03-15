@@ -1,7 +1,8 @@
 import { expect } from 'chai'
 import { List, Map, Set, Stack } from 'immutable'
 import { Maybe, Just, Nothing } from '../../src/core/Maybe'
-import { Either, Left, Right } from '../../src/core/Either'
+import { Left, Right } from '../../src/core/Either'
+import { Record } from '../../src/core/Record'
 import { deepEqual } from '../../src/utils/deepEqual'
 
 describe('deepEqual', () => {
@@ -31,6 +32,78 @@ describe('deepEqual', () => {
       expect(deepEqual(Set([1, 2]), Set([1, 2]))).to.be.true
       expect(deepEqual(Stack([1, 2]), Stack([1, 2]))).to.be.true
       expect(deepEqual(Map({ x: 'foo' }), Map({ x: 'foo' }))).to.be.true
+    })
+  })
+
+  describe('Record', () => {
+
+    class Foo extends Record {
+      constructor(public x: any, public y?: any) { super() }
+    }
+
+    class Bar extends Record {
+      constructor(public m: any, public n?: any) { super() }
+    }
+
+    it('should compare Record with primitive datatype correctly (number)', () => {
+      expect(deepEqual(new Foo(0, 1), new Foo(0, 1))).to.be.true
+      expect(deepEqual(new Foo(0, 0), new Foo(0, 1))).to.be.false
+    })
+    it('should compare Record with primitive datatype correctly (string)', () => {
+      expect(deepEqual(new Foo('foo', 'bar'), new Foo('foo', 'bar'))).to.be.true
+      expect(deepEqual(new Foo('foo', 'baz'), new Foo('foo', 'bar'))).to.be.false
+    })
+    it('should compare Record with primitive datatype correctly (boolean)', () => {
+      expect(deepEqual(new Foo(true, false), new Foo(true, false))).to.be.true
+      expect(deepEqual(new Foo(true, true), new Foo(true, false))).to.be.false
+    })
+    it('should compare Record with native JS object correctly', () => {
+      expect(deepEqual(
+        new Foo({ x: 'foo' }, { y: 'bar' }),
+        new Foo({ x: 'foo' }, { y: 'bar' })
+      )).to.be.true
+      expect(deepEqual(
+        new Foo({ x: 'foo' }, { y: 'bar' }),
+        new Foo({ x: 'foo' }, { y: 'baz' })
+      )).to.be.false
+    })
+    it('should compare Record with immutable object correctly', () => {
+      expect(deepEqual(
+        new Foo(List([1, 2]), Stack(['foo', 'bar'])),
+        new Foo(List([1, 2]), Stack(['foo', 'bar']))
+      )).to.be.true
+      expect(deepEqual(
+        new Foo(List([1, 2]), Stack(['foo', 'bar'])),
+        new Foo(List([1, 3]), Stack(['foo', 'baz']))
+      )).to.be.false
+    })
+    it('should compare nested Record correctly', () => {
+      expect(deepEqual(new Foo(new Bar('baz')), new Foo(new Bar('baz')))).to.be.true
+      expect(deepEqual(new Foo(new Bar('baz')), new Foo(new Bar('qux')))).to.be.false
+    })
+    it('should compare nested Record and immutable object (2 layer)', () => {
+      expect(deepEqual(new Foo(List([1, 2])), new Foo(List([1, 2])))).to.be.true
+      expect(deepEqual(new Foo(List([1, 2])), new Foo(List([1, 3])))).to.be.false
+    })
+    it('should compare nested Record and immutable object (3 layer)', () => {
+      expect(deepEqual(
+        new Foo(List([new Bar(1, 'foo')])),
+        new Foo(List([new Bar(1, 'foo')]))
+      )).to.be.true
+      expect(deepEqual(
+        new Foo(List([new Bar(1, 'foo')])),
+        new Foo(List([new Bar(1, 'bar')]))
+      )).to.be.false
+    })
+    it('should compare nested Record and immutable object (4 layer)', () => {
+      expect(deepEqual(
+        new Foo(List([new Bar(Math.PI, Set([1, 2]))])),
+        new Foo(List([new Bar(Math.PI, Set([1, 2]))]))
+      )).to.be.true
+      expect(deepEqual(
+        new Foo(List([new Bar(Math.PI, Set([1, 2]))])),
+        new Foo(List([new Bar(Math.PI, Set([1, 0]))]))
+      )).to.be.false
     })
   })
 

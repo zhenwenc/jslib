@@ -15,7 +15,7 @@ var args       = require('yargs').argv
 var project = tsc.createProject('tsconfig.json')
 
 var mochaConfig = {
-  reporter: 'spec',
+  reporter: 'dot', // spec
   bail: !!args.bail,
 }
 

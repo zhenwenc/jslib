@@ -37,6 +37,7 @@
     "src/core/Either.ts",
     "src/core/Equals.ts",
     "src/core/Maybe.ts",
+    "src/core/Record.ts",
     "src/helpers.ts",
     "src/helpers/ChaiModel.ts",
     "src/main.ts",
