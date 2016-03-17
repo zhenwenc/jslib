@@ -27,15 +27,11 @@ export abstract class Either<A, B> extends Record {
   }
 
   static isLeft(value) {
-    if (!Either.isEither(value)) {
-      throw new Error(`Expects 'Either', but ${value}`)
-    } else return value.isLeft
+    return Either.isEither(value) && value.isLeft
   }
 
   static isRight(value) {
-    if (!Either.isEither(value)) {
-      throw new Error(`Expects 'Either', but ${value}`)
-    } else return value.isRight
+    return Either.isEither(value) && value.isRight
   }
 
   abstract getIsLeft(): boolean
