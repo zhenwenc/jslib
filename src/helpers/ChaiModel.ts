@@ -399,6 +399,103 @@ export function ChaiModel(chai: any, utils: any): any {
   Assertion.overwriteMethod('within', assertCollectionSizeWithin)
 
   /**
+   * ### .error(constructor)
+   *
+   * Asserts that the values of the target is equals to a specific error, or specific type
+   * of error (as determined using `instanceof`), optionally with a RegExp or string inclusion
+   * test for the error's message.
+   *
+   *     var err = new ReferenceError('This is a bad function.')
+   *     expect(err).to.be.error(ReferenceError)
+   *     expect(err).to.be.error(Error)
+   *     expect(err).to.be.error(/bad function/)
+   *     expect(err).to.not.be.error('good function')
+   *     expect(err).to.be.error(ReferenceError, /bad function/)
+   *     expect(err).to.be.error(err)
+   *
+   * @name error
+   * @param {ErrorConstructor} constructor
+   * @param {String|RegExp} expected error message
+   * @param {String} message _optional_
+   * @see https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Error#Error_types
+   * @returns error for chaining (null if no error)
+   * @namespace BDD
+   * @api public
+   */
+
+  function assertError(expected: any, errMsg?: string | RegExp, msg?: string) {
+    if (arguments.length === 0) {
+      throw new Error('Must have expected error.')
+    }
+    if (!!msg) utils.flag(this, 'message', msg)
+
+    const actual = utils.flag(this, 'object')
+    new Assertion(actual, msg).is.a('error')
+
+    // CASE: Expected to be a desired error
+    if (expected && expected instanceof Error) {
+      const expError = expected as Error
+      this.assert(
+        _.eq(expError.name, actual.name) &&
+        _.eq(expError.message, actual.message),
+        'expected error to equal #{exp} but got #{act}',
+        'expected error to not equal #{exp} but got #{act}',
+        expError, actual
+      )
+      return this
+    }
+
+    // CASE: Expected to be of a desired error type
+    if (typeof expected === 'function') {
+      let name = expected.prototype.name
+      if (!name || (name == 'Error' && expected !== Error)) {
+        name = expected.name || (new expected()).name
+      }
+      this.assert(
+        _.eq(name, actual.name),
+        'expected #{this} with type #{exp} but got #{act}',
+        'expected #{this} not with type #{exp} but got #{act}',
+        name, actual.name
+      )
+      if (!errMsg) return this
+    }
+
+    const expMsg = _.isFunction(expected) ? errMsg : expected
+    const actMsg = "message" in actual ? actual.message : '' + actual
+
+    // const message = "message" in actual ? actual.message : '' + actual
+
+    // CASE: Expected to have error message matches regex
+    if (!_.isNil(actMsg) && !!expMsg && expMsg instanceof RegExp) {
+      this.assert(
+        expMsg.exec(actMsg),
+        'expected #{this} to have error message matching #{exp} but got #{act}',
+        'expected #{this} to have error message not matching #{exp}',
+        expMsg, actMsg
+      )
+      return this
+    }
+
+    // CASE: Expected to have error message includes string
+    else if (!_.isNil(actMsg) && !!expMsg && _.isString(expMsg)) {
+      this.assert(
+        ~expMsg.indexOf(actMsg),
+        'expected #{this} to have error message including #{exp} but got #{act}',
+        'expected #{this} to have error message not including #{act}',
+        expMsg, actMsg
+      )
+      return this
+    }
+
+    // CASE: Unknown case
+    else {
+      throw new Error('Must specify expected message or regex.' + errMsg)
+    }
+  }
+
+  Assertion.addMethod('error', assertError)
+
+  /**
    * ## TDD API Reference
    */
 

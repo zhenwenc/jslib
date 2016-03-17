@@ -192,4 +192,36 @@ describe('ChaiSpec', () => {
     })
   })
 
+  describe('assert error', () => {
+    it('should check common error instance correctly', () => {
+      expect(new Error('foo')).to.be.error(new Error('foo'))
+      expect(new URIError('foo')).to.be.error(new URIError('foo'))
+      expect(new TypeError('foo')).to.be.error(new TypeError('foo'))
+      expect(new RangeError('foo')).to.be.error(new RangeError('foo'))
+      expect(new SyntaxError('foo')).to.be.error(new SyntaxError('foo'))
+      expect(new ReferenceError('foo')).to.be.error(new ReferenceError('foo'))
+    })
+    it('should fail if targeted error instance have incorrect message', () => {
+      expect(new Error('foo')).to.not.be.error(new Error('bar'))
+    })
+    it('should check Error type correctly', () => {
+      expect(new Error('foo')).to.be.error(Error)
+      expect(new Error('foo')).to.not.be.error(TypeError)
+      expect(new TypeError('foo')).to.be.error(TypeError)
+      expect(new TypeError('foo')).to.not.be.error(Error)
+    })
+    it('should check error message matching given regex', () => {
+      const err = new ReferenceError('This is a bad function.')
+      expect(err).to.be.error(/This is a bad function./)
+      expect(err).to.be.error(/This is a (bad|good) function./)
+      expect(err).to.be.error(/bad function/)
+      expect(err).to.not.be.error(/good function/)
+    })
+    it('should check error message includes the given text', () => {
+      const err = new ReferenceError('This is a bad function.')
+      expect(err).to.be.error('This is a bad function.')
+      expect(err).to.not.be.error('This is a good function.')
+    })
+  })
+
 })
