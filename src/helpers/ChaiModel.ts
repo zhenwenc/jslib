@@ -8,6 +8,7 @@
 
 import * as _ from 'lodash'
 import { Iterable, List } from 'immutable'
+import { Either } from '../core/Either'
 import { canEquals } from '../core/Equals'
 import { deepEqual } from '../utils/deepEqual'
 import { isSet, isList, isStack } from '../utils/Immutable'
@@ -423,15 +424,7 @@ export function ChaiModel(chai: any, utils: any): any {
    * @api public
    */
 
-  function assertError(expected: any, errMsg?: string | RegExp, msg?: string) {
-    if (arguments.length === 0) {
-      throw new Error('Must have expected error.')
-    }
-    if (!!msg) utils.flag(this, 'message', msg)
-
-    const actual = utils.flag(this, 'object')
-    new Assertion(actual, msg).is.a('error')
-
+  function assertErrorEquals(expected, actual, errMsg?: string | RegExp, msg?: string) {
     // CASE: Expected to be a desired error
     if (expected && expected instanceof Error) {
       const expError = expected as Error
@@ -463,8 +456,6 @@ export function ChaiModel(chai: any, utils: any): any {
     const expMsg = _.isFunction(expected) ? errMsg : expected
     const actMsg = "message" in actual ? actual.message : '' + actual
 
-    // const message = "message" in actual ? actual.message : '' + actual
-
     // CASE: Expected to have error message matches regex
     if (!_.isNil(actMsg) && !!expMsg && expMsg instanceof RegExp) {
       this.assert(
@@ -493,7 +484,35 @@ export function ChaiModel(chai: any, utils: any): any {
     }
   }
 
+  function assertError(expected: any, errMsg?: string | RegExp, msg?: string) {
+    if (arguments.length === 0) {
+      throw new Error('Must have expected error.')
+    }
+    if (!!msg) utils.flag(this, 'message', msg)
+
+    const actual = utils.flag(this, 'object')
+    new Assertion(actual, msg).is.a('error')
+
+    return assertErrorEquals.bind(this)(expected, actual, errMsg, msg)
+  }
+
+  function assertErrorOnLeft(expected: any, errMsg?: string | RegExp, msg?: string) {
+    if (arguments.length === 0) {
+      throw new Error('Must have expected error.')
+    }
+    if (!!msg) utils.flag(this, 'message', msg)
+
+    const actual = utils.flag(this, 'object')
+    new Assertion(
+      Either.isLeft(actual),
+      `expected an Either.Left instance, but got ${this.toString()}`
+    ).to.be.true
+
+    return assertErrorEquals.bind(this)(expected, actual.left.get, errMsg, msg)
+  }
+
   Assertion.addMethod('error', assertError)
+  Assertion.addMethod('errorOnLeft', assertErrorOnLeft)
 
   /**
    * ## TDD API Reference

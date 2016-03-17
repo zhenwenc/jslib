@@ -201,9 +201,6 @@ describe('ChaiSpec', () => {
       expect(new SyntaxError('foo')).to.be.error(new SyntaxError('foo'))
       expect(new ReferenceError('foo')).to.be.error(new ReferenceError('foo'))
     })
-    it('should fail if targeted error instance have incorrect message', () => {
-      expect(new Error('foo')).to.not.be.error(new Error('bar'))
-    })
     it('should check Error type correctly', () => {
       expect(new Error('foo')).to.be.error(Error)
       expect(new Error('foo')).to.not.be.error(TypeError)
@@ -220,7 +217,43 @@ describe('ChaiSpec', () => {
     it('should check error message includes the given text', () => {
       const err = new ReferenceError('This is a bad function.')
       expect(err).to.be.error('This is a bad function.')
-      expect(err).to.not.be.error('This is a good function.')
+      expect(err).to.not.be.error('a good function')
+    })
+    it('should fail if the targeted error instance have incorrect message', () => {
+      expect(new Error('foo')).to.not.be.error(new Error('bar'))
+    })
+  })
+
+  describe('assert error on Left', () => {
+    it('should check common error instance correctly', () => {
+      const left = <T>(err: T) => Left<T, string>(err)
+      expect(left(new Error('foo'))).to.be.errorOnLeft(new Error('foo'))
+      expect(left(new URIError('foo'))).to.be.errorOnLeft(new URIError('foo'))
+      expect(left(new TypeError('foo'))).to.be.errorOnLeft(new TypeError('foo'))
+      expect(left(new RangeError('foo'))).to.be.errorOnLeft(new RangeError('foo'))
+      expect(left(new SyntaxError('foo'))).to.be.errorOnLeft(new SyntaxError('foo'))
+      expect(left(new ReferenceError('foo'))).to.be.errorOnLeft(new ReferenceError('foo'))
+    })
+    it('should check Error type correctly', () => {
+      const err = Left<Error, string>(new Error('foo'))
+      expect(err).to.be.errorOnLeft(Error)
+      expect(err).to.not.be.errorOnLeft(TypeError)
+    })
+    it('should check Error on Left have message matching given regex', () => {
+      const left = Left<Error, string>(new Error('This is a bad function.'))
+      expect(left).to.be.errorOnLeft(/This is a bad function./)
+      expect(left).to.be.errorOnLeft(/This is a (bad|good) function./)
+      expect(left).to.be.errorOnLeft(/bad function/)
+      expect(left).to.not.be.errorOnLeft(/good function/)
+    })
+    it('should check Error on Left have message includes the given text', () => {
+      const left = Left<Error, string>(new Error('This is a bad function.'))
+      expect(left).to.be.errorOnLeft('This is a bad function.')
+      expect(left).to.not.be.errorOnLeft('This is a good function.')
+    })
+    it('should fail if the targeted Left instance have incorrect error message', () => {
+      const left = Left<Error, string>(new Error('foo'))
+      expect(left).to.not.be.errorOnLeft(new Error('bar'))
     })
   })
 
