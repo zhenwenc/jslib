@@ -505,7 +505,7 @@ export function ChaiModel(chai: any, utils: any): any {
     const actual = utils.flag(this, 'object')
     new Assertion(
       Either.isLeft(actual),
-      `expected an Either.Left instance, but got ${this.toString()}`
+      `expected an Either.Left instance, but got ${this}`
     ).to.be.true
 
     return assertErrorEquals.bind(this)(expected, actual.left.get, errMsg, msg)
