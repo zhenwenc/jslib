@@ -2,10 +2,10 @@
   "name": "tsfp",
   "version": "1.0.0",
   "description": "A collection of functional utility libraries for JS projects",
-  "main": "./lib/tsfp.js",
-  "typings": "./lib/tsfp.d.ts",
+  "main": "./lib/main.js",
+  "typings": "./lib/main.d.ts",
   "typescript": {
-    "definition": "./lib/tsfp.d.ts"
+    "definition": "./lib/main.d.ts"
   },
   "files": [
     "LICENSE",
