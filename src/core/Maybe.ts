@@ -120,6 +120,41 @@ export abstract class Maybe<T> extends Record {
   }
 
   /**
+   * Apply given function to values wrapped in `Maybe`, and wrap the result in another
+   * `Maybe`. If any of the argument is a `Nothing`, return `Nothing`.
+   *
+   * @param {Function} function to apply
+   * @param {Maybe} a
+   * @param {Maybe} b
+   * @return {Maybe}
+   */
+  static lift2<A,B,C>(f: (A, B) => C, a: Maybe<A>, b: Maybe<B>): Maybe<C> {
+    if (a.isJust && b.isJust) {
+      return Just(f(a.get, b.get))
+    } else {
+      return Nothing
+    }
+  }
+
+  /**
+   * Apply given function to values wrapped in `Maybe`, and wrap the result in another
+   * `Maybe`. If any of the argument is a `Nothing`, return `Nothing`.
+   *
+   * @param {Function} function to apply
+   * @param {Maybe} a
+   * @param {Maybe} b
+   * @param {Maybe} c
+   * @return {Maybe}
+   */
+  static lift3<A,B,C,D>(f: (A, B, C) => D, a: Maybe<A>, b: Maybe<B>, c: Maybe<C>): Maybe<D> {
+    if (a.isJust && b.isJust && c.isJust) {
+      return Just(f(a.get, b.get, c.get))
+    } else {
+      return Nothing
+    }
+  }
+
+  /**
    * Return `true` if this is a `Just` instance.
    *
    * @return {Boolean} Returns `true` if this is a `Just` instance
