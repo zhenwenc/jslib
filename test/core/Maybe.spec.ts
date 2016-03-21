@@ -130,4 +130,30 @@ describe('maybe', () => {
       expect(fn()).to.be.eql(Nothing)
     })
   })
+
+  describe('lift', () => {
+    it('#lift2: should call the function if all the value are non-empty', () => {
+      const fn = (a, b) => (a + b)
+      expect(Maybe.lift2(fn, Just(1), Just(2))).to.be.eql(Just(3))
+    })
+
+    it('#lift3: should call the function if all the value are non-empty', () => {
+      const fn = (a, b, c) => (a + b * c)
+      expect(Maybe.lift3(fn, Just(1), Just(2), Just(3))).to.be.eql(Just(7))
+    })
+
+    it('#lift2: should return Nothing if any of the value is empty', () => {
+      const fn = (a, b) => (a + b)
+      expect(Maybe.lift2(fn, Just(1), Nothing)).to.be.eql(Nothing)
+      expect(Maybe.lift2(fn, Nothing, Just(2))).to.be.eql(Nothing)
+    })
+
+    it('#lift3: should return Nothing if any of the value is empty', () => {
+      const fn = (a, b, c) => (a + b * c)
+      expect(Maybe.lift3(fn, Nothing, Just(2), Just(3))).to.be.eql(Nothing)
+      expect(Maybe.lift3(fn, Just(1), Nothing, Just(3))).to.be.eql(Nothing)
+      expect(Maybe.lift3(fn, Just(1), Just(2), Nothing)).to.be.eql(Nothing)
+    })
+
+  })
 })
