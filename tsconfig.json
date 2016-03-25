@@ -40,7 +40,7 @@
     "src/core/Record.ts",
     "src/helpers.ts",
     "src/helpers/ChaiModel.ts",
-    "src/main.ts",
+    "src/index.ts",
     "src/utils.ts",
     "src/utils/deepEqual.ts",
     "src/utils/Hash.ts",
