@@ -8,3 +8,4 @@ bower_components
 dist
 lib
 typings
+**/*.tgz
