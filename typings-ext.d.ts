@@ -1,5 +1,7 @@
-// Extended type definitions for chai framework
+// Additional type definitions which are introduced by
+// this library.
 
+// Extended type definitions for chai framework
 declare module Chai {
   interface Assertion {
 
