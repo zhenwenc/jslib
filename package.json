@@ -1,34 +1,50 @@
 {
   "name": "tsfp",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "A collection of functional utility libraries for JS projects",
-  "main": "lib/index.js",
-  "directories": {
-    "test": "test"
+  "main": "./lib/index.js",
+  "typings": "./lib/index.d.ts",
+  "typescript": {
+    "definition": "./lib/index.d.ts"
   },
+  "files": [
+    "LICENSE",
+    "lib"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "clean": "npm cache clean && rimraf node_modules doc typings coverage dist",
+    "clean:dist": "rimraf lib dist coverage",
+    "lint": "./node_modules/.bin/tslint 'src/**/*.ts'",
+    "test": "mocha src/**/*.ts --require ts-node/register --reporter dot test/**/*.spec.ts",
+    "build": "tsc",
+    "prebuild": "npm run clean:dist && tsconfig",
+    "watch": "npm run watch:build",
+    "watch:test": "npm test -- --watch --watch-extensions ts --bail",
+    "watch:build": "npm run build -- --watch",
+    "typings-install": "typings install",
+    "postinstall": "npm run typings-install",
+    "prepublish": "npm run build && cp -r dist/src lib && cp typings-ext.d.ts lib",
+    "publishLocal": "npm run prepublish && npm pack"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zhenwenc/tsfp.git"
   },
   "author": "Zhenwen Cai <frederickcai@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/zhenwenc/tsfp/issues"
   },
   "homepage": "https://github.com/zhenwenc/tsfp#readme",
   "devDependencies": {
+    "babel-core": "^6.6.4",
+    "babel-preset-es2015": "^6.6.0",
+    "babel-preset-react": "^6.5.0",
     "chai": "^3.5.0",
-    "gulp": "^3.9.1",
-    "gulp-mocha": "^2.2.0",
-    "gulp-notify": "^2.2.0",
-    "gulp-rimraf": "^0.2.0",
-    "gulp-typescript": "^2.11.0",
-    "gulp-watch": "^4.3.5",
-    "merge2": "^1.0.1",
+    "immutable": "^3.7.6",
+    "lodash": "^4.6.1",
     "should": "^8.2.2",
-    "yargs": "^4.1.0"
+    "ts-node": "^0.7.1",
+    "typings": "^0.7.9"
   }
 }

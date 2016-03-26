@@ -2,13 +2,17 @@
 
 /* tslint:disable:no-unused-variable */
 import { Maybe, Just, Nothing, NothingWrapper } from './Maybe'
+import { Record } from './Record'
+import { deepEqual } from '../utils/deepEqual'
 /* tslint:enable:no-unused-variable */
 
 // -- Either Class ------------------------------------------------------------
 
-export abstract class Either<A, B> {
+export abstract class Either<A, B> extends Record {
 
-  constructor(public a: A, public b: B) {}
+  constructor(public a: A, public b: B) {
+    super()
+  }
 
   static Left<X, Y>(value: X): Either<X, Y> {
     return new LeftWrapper<X, Y>(value)
@@ -23,15 +27,11 @@ export abstract class Either<A, B> {
   }
 
   static isLeft(value) {
-    if (!Either.isEither(value)) {
-      throw new Error(`Expects 'Either', but ${value}`)
-    } else return value.isLeft
+    return Either.isEither(value) && value.isLeft
   }
 
   static isRight(value) {
-    if (!Either.isEither(value)) {
-      throw new Error(`Expects 'Either', but ${value}`)
-    } else return value.isRight
+    return Either.isEither(value) && value.isRight
   }
 
   abstract getIsLeft(): boolean
@@ -66,7 +66,7 @@ export abstract class Either<A, B> {
    * @param  {Function} fb the function to apply if this is a `Right`
    * @return {Any}         the results of applying the function
    */
-  fold<X, Y>(fa: (A) => X, fb: (B) => Y) {
+  fold<X, Y>(fa: (a: A) => X, fb: (b: B) => Y) {
     return this.isLeft ? fa(this.a) : fb(this.b)
   }
 }
@@ -77,20 +77,36 @@ class LeftWrapper<A, B> extends Either<A, B> {
   constructor(value: A) { super(value, undefined) }
   getIsLeft()  { return true  }
   getIsRight() { return false }
-  toString()   { return `Left(${this.a})` }
+
+  equals(that: any) {
+    return Either.isLeft(that)
+      && deepEqual(this.left.get, that.left.get)
+  }
+
+  toString() {
+    return `Left(${this.a})`
+  }
 }
 
 class RightWrapper<A, B> extends Either<A, B> {
   constructor(value: B) { super(undefined, value) }
   getIsLeft()  { return false }
   getIsRight() { return true  }
-  toString()   { return `Right(${this.b})` }
+
+  equals(that: any) {
+    return Either.isRight(that)
+      && deepEqual(this.right.get, that.right.get)
+  }
+
+  toString() {
+    return `Right(${this.b})`
+  }
 }
 
 // -- Left / Right Projection Class -------------------------------------------
 
-export class LeftProjection<A, B> {
-  constructor(private e: Either<A, B>) {}
+export class LeftProjection<A, B> extends Record {
+  constructor(private e: Either<A, B>) { super() }
 
   /**
    * Returns the value from this `Either` if this is of a `Left`, otherwise
@@ -136,7 +152,7 @@ export class LeftProjection<A, B> {
    * @param  {Function} fn The function to map
    * @return {Either}
    */
-  map<X>(fn: (A) => X): Either<X, B> {
+  map<X>(fn: (a: A) => X): Either<X, B> {
     return this.e.isLeft
       ? Either.Left<X, B>(fn(this.get))
       : Either.Right<X, B>(this.e.right.get)
@@ -150,15 +166,20 @@ export class LeftProjection<A, B> {
    * @param  {Function} fn The function to bind accross the `Left`
    * @return {Either}
    */
-  flatMap<X>(fn: (A) => Either<X, B>): Either<X, B> {
+  flatMap<X>(fn: (a: A) => Either<X, B>): Either<X, B> {
     return this.e.isLeft ? fn(this.get) : Either.Right<X, B>(this.e.right.get)
+  }
+
+  equals(that: any) {
+    return that instanceof LeftProjection
+      && deepEqual(this.get, that.get)
   }
 
   toString() { return `LeftProjection(${this.e})` }
 }
 
-export class RightProjection<A, B> {
-  constructor(private e: Either<A, B>) {}
+export class RightProjection<A, B> extends Record {
+  constructor(private e: Either<A, B>) { super() }
 
   /**
    * Returns the value from this `Either` if this is of a `Right`, otherwise
@@ -204,7 +225,7 @@ export class RightProjection<A, B> {
    * @param  {Function} fn The function to map
    * @return {Either}
    */
-  map<X>(fn: (A) => X): Either<A, X> {
+  map<X>(fn: (b: B) => X): Either<A, X> {
     return this.e.isRight
       ? Either.Right<A, X>(fn(this.get))
       : Either.Left<A, X>(this.e.left.get)
@@ -218,8 +239,13 @@ export class RightProjection<A, B> {
    * @param  {Function} fn The function to bind accross the `Right`
    * @return {Either}
    */
-  flatMap<X>(fn: (A) => Either<A, X>): Either<A, X> {
+  flatMap<X>(fn: (b: B) => Either<A, X>): Either<A, X> {
     return this.e.isRight ? fn(this.get) : Either.Left<A, X>(this.e.left.get)
+  }
+
+  equals(that: any) {
+    return that instanceof RightProjection
+      && deepEqual(this.get, that.get)
   }
 
   toString() { return `RightProjection(${this.e})` }

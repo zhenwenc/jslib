@@ -1,5 +1,7 @@
 logs
 *.log
+.tern-port
+.DS_Store
 coverage
 lib/test/*
 node_modules
@@ -7,3 +9,4 @@ bower_components
 dist
 lib
 typings
+**/*.tgz

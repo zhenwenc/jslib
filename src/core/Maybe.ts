@@ -1,14 +1,17 @@
 'use strict'
 
 import { Either, Left, Right } from './Either'
+import { Record } from './Record'
+import { deepEqual } from '../utils/deepEqual'
 
 // -- Maybe Class -------------------------------------------------------------
 
-export abstract class Maybe<T> {
+export abstract class Maybe<T> extends Record {
 
   protected value: T
 
   constructor(value: T) {
+    super()
     this.value = value
   }
 
@@ -117,6 +120,41 @@ export abstract class Maybe<T> {
   }
 
   /**
+   * Apply given function to values wrapped in `Maybe`, and wrap the result in another
+   * `Maybe`. If any of the argument is a `Nothing`, return `Nothing`.
+   *
+   * @param {Function} function to apply
+   * @param {Maybe} a
+   * @param {Maybe} b
+   * @return {Maybe}
+   */
+  static lift2<A,B,C>(f: (A, B) => C, a: Maybe<A>, b: Maybe<B>): Maybe<C> {
+    if (a.isJust && b.isJust) {
+      return Just(f(a.get, b.get))
+    } else {
+      return Nothing
+    }
+  }
+
+  /**
+   * Apply given function to values wrapped in `Maybe`, and wrap the result in another
+   * `Maybe`. If any of the argument is a `Nothing`, return `Nothing`.
+   *
+   * @param {Function} function to apply
+   * @param {Maybe} a
+   * @param {Maybe} b
+   * @param {Maybe} c
+   * @return {Maybe}
+   */
+  static lift3<A,B,C,D>(f: (A, B, C) => D, a: Maybe<A>, b: Maybe<B>, c: Maybe<C>): Maybe<D> {
+    if (a.isJust && b.isJust && c.isJust) {
+      return Just(f(a.get, b.get, c.get))
+    } else {
+      return Nothing
+    }
+  }
+
+  /**
    * Return `true` if this is a `Just` instance.
    *
    * @return {Boolean} Returns `true` if this is a `Just` instance
@@ -145,24 +183,6 @@ export abstract class Maybe<T> {
   }
 
   /**
-   * Return the result of applying `f` to the value of this `Maybe` if this is
-   * a `Just`. Otherwise, evaluates expression `ifEmpty`.
-   *
-   * @param  {Function} ifEmpty the expression to evaluete if this is a `Nothing`
-   * @param  {Function} f       the function to apply if this is a `Just`
-   * @return {Any}
-   */
-  fold<F>(ifEmpty: () => F, f: (T) => F): F {
-    return this.isJust ? f(this.get) : ifEmpty()
-  }
-
-  toString() {
-    return `Maybe(${this.value})`
-  }
-
-  // -- Functions -------------------------------------------------------------
-
-  /**
    * Returns the maybe's value.
    *
    * @return {Any}
@@ -174,6 +194,12 @@ export abstract class Maybe<T> {
       return this.value
   }
 
+  toString() {
+    return `Maybe(${this.value})`
+  }
+
+  // -- Functions -------------------------------------------------------------
+
   /**
    * Returns the maybe's value if the maybe is a `Just`, otherwise return the
    * default value `or`.
@@ -181,7 +207,7 @@ export abstract class Maybe<T> {
    * @param  {Any} or the default expression
    * @return {Any}
    */
-  getOrElse(or) {
+  getOrElse(or: T) {
     return this.isNothing ? or : this.get
   }
 
@@ -215,7 +241,7 @@ export abstract class Maybe<T> {
    * @param  {Function} fn the function to apply
    * @return {Maybe}
    */
-  map<F>(fn: (T) => F): Maybe<F> {
+  map<F>(fn: (t: T) => F): Maybe<F> {
     return this.isJust ? Maybe.Just(fn(this.get)) : new NothingWrapper
   }
 
@@ -229,8 +255,20 @@ export abstract class Maybe<T> {
    * @param  {Function} fn the function to apply
    * @return {Maybe}
    */
-  flatMap<F>(fn: (T) => Maybe<F>): Maybe<F> {
+  flatMap<F>(fn: (t: T) => Maybe<F>): Maybe<F> {
     return this.isJust ? fn(this.get) : new NothingWrapper
+  }
+
+  /**
+   * Return the result of applying `f` to the value of this `Maybe` if this is
+   * a `Just`. Otherwise, evaluates expression `ifEmpty`.
+   *
+   * @param  {Function} ifEmpty the expression to evaluete if this is a `Nothing`
+   * @param  {Function} f       the function to apply if this is a `Just`
+   * @return {Any}
+   */
+  fold<F>(ifEmpty: () => F, f: (t: T) => F): F {
+    return this.isJust ? f(this.get) : ifEmpty()
   }
 
   /**
@@ -285,8 +323,9 @@ export class JustWrapper<T> extends Maybe<T> {
     return `Just(${this.value})`
   }
 
-  equals(that) {
-    return Maybe.isJust(that) && that.value === this.value
+  equals(that: any) {
+    return Maybe.isJust(that)
+      && deepEqual(that.value, this.value)
   }
 
 }
@@ -303,7 +342,7 @@ export class NothingWrapper extends Maybe<any> {
     return 'Nothing'
   }
 
-  equals(that) {
+  equals(that: any) {
     return Maybe.isNothing(that)
   }
 

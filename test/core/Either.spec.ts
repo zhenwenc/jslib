@@ -1,8 +1,6 @@
-'use strict'
-
 import { expect } from 'chai'
-import { Just, Nothing } from '../src/Maybe'
-import { Either, Left, Right } from '../src/Either'
+import { Just, Nothing } from '../../src/core/Maybe'
+import { Either, Left, Right } from '../../src/core/Either'
 
 describe('either', () => {
   describe('Either', () => {
