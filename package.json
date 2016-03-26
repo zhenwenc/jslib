@@ -21,6 +21,8 @@
     "watch": "npm run watch:build",
     "watch:test": "npm test -- --watch --watch-extensions ts --bail",
     "watch:build": "npm run build -- --watch",
+    "typings-install": "typings install",
+    "postinstall": "npm run typings-install",
     "prepublish": "npm run build && cp -r dist/src lib"
   },
   "repository": {
@@ -41,6 +43,7 @@
     "immutable": "^3.7.6",
     "lodash": "^4.6.1",
     "should": "^8.2.2",
-    "ts-node": "^0.7.1"
+    "ts-node": "^0.7.1",
+    "typings": "^0.7.9"
   }
 }

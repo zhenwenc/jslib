@@ -16,23 +16,15 @@
     "filesGlob": [
         "src/**/*.ts",
         "test/**/*.ts",
-        "typings/**/*.d.ts",
-        "./typings-ext.d.ts",
-        "node_modules/immutable/dist/immutable.d.ts",
-        "!typings/should/should.d.ts",
-        "!typings/tsd.d.ts"
+        "typings-ext.d.ts",
+        "typings/browser.d.ts"
     ],
     "atom": {
         "rewriteTsconfig": true
     },
     "files": [
-        "typings/assertion-error/assertion-error.d.ts",
-        "typings/chai/chai.d.ts",
-        "typings/js-yaml/js-yaml.d.ts",
-        "typings/lodash/lodash.d.ts",
-        "typings/mocha/mocha.d.ts",
-        "./typings-ext.d.ts",
-        "node_modules/immutable/dist/immutable.d.ts",
+        "typings-ext.d.ts",
+        "typings/browser.d.ts",
         "src/core/Either.ts",
         "src/core/Equals.ts",
         "src/core/Maybe.ts",
