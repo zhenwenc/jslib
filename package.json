@@ -23,7 +23,8 @@
     "watch:build": "npm run build -- --watch",
     "typings-install": "typings install",
     "postinstall": "npm run typings-install",
-    "prepublish": "npm run build && cp -r dist/src lib"
+    "prepublish": "npm run build && cp -r dist/src lib && cp typings-ext.d.ts lib",
+    "publishLocal": "npm run prepublish && npm pack"
   },
   "repository": {
     "type": "git",
