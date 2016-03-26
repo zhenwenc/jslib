@@ -17,7 +17,7 @@
     "lint": "./node_modules/.bin/tslint 'src/**/*.ts'",
     "test": "mocha --require ts-node/register --reporter dot test/**/*.spec.ts",
     "build": "tsc",
-    "prebuild": "npm run clean:dist",
+    "prebuild": "npm run clean:dist && tsconfig",
     "watch": "npm run watch:build",
     "watch:test": "npm test -- --watch --bail",
     "watch:build": "npm run build -- --watch",
