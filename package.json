@@ -12,7 +12,16 @@
     "lib"
   ],
   "scripts": {
-    "test": "gulp test"
+    "clean": "npm cache clean && rimraf node_modules doc typings coverage dist",
+    "clean:dist": "rimraf lib dist coverage",
+    "lint": "./node_modules/.bin/tslint 'src/**/*.ts'",
+    "test": "mocha --require ts-node/register test/**/*.spec.ts",
+    "build": "tsc",
+    "prebuild": "npm run clean:dist",
+    "watch": "npm run watch:build",
+    "watch:test": "npm test -- --watch",
+    "watch:build": "npm run build -- --watch",
+    "prepublish": "npm run build && cp -r dist/src lib"
   },
   "repository": {
     "type": "git",
@@ -42,6 +51,7 @@
     "lodash": "^4.6.1",
     "merge2": "^1.0.1",
     "should": "^8.2.2",
+    "ts-node": "^0.7.1",
     "tsconfig-glob": "^0.4.1",
     "yargs": "^4.2.0"
   }
