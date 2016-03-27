@@ -58,8 +58,5 @@
     "typedoc": "^0.3.12",
     "typescript": "^1.9.0-dev.20160327",
     "typings": "^0.7.9"
-  },
-  "dependencies": {
-    "ntypescript": "1.201603270104.1"
   }
 }
