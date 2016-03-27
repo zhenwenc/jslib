@@ -16,7 +16,7 @@
     "clean:dist": "rimraf lib dist coverage",
     "lint": "./node_modules/.bin/tslint 'src/**/*.ts'",
     "test": "mocha src/**/*.ts --require ts-node/register --reporter dot test/**/*.spec.ts",
-    "build": "tsc",
+    "build": "ntsc",
     "prebuild": "npm run clean:dist && npm run typings-install && tsconfig",
     "watch": "npm run watch:build",
     "watch:test": "npm test -- --watch --watch-extensions ts --bail",
@@ -52,11 +52,14 @@
     "chai": "^3.5.0",
     "immutable": "^3.7.6",
     "lodash": "^4.6.1",
+    "ntypescript": "^1.201603270104.1",
     "should": "^8.2.2",
     "ts-node": "^0.7.1",
-    "tsc": "^1.20150623.0",
     "typedoc": "^0.3.12",
     "typescript": "^1.9.0-dev.20160327",
     "typings": "^0.7.9"
+  },
+  "dependencies": {
+    "ntypescript": "1.201603270104.1"
   }
 }
