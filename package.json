@@ -43,7 +43,7 @@
   "bugs": {
     "url": "https://github.com/zhenwenc/tsfp/issues"
   },
-  "homepage": "https://github.com/zhenwenc/tsfp#readme",
+  "homepage": "http://tsfp.js.org",
   "devDependencies": {
     "babel-cli": "^6.6.5",
     "babel-core": "^6.6.4",
