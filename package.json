@@ -1,6 +1,6 @@
 {
   "name": "tsfp",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A collection of functional utility libraries for JS projects",
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
