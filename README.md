@@ -1,7 +1,5 @@
 # TSFP
 
-> **TypeScript functional programming** :sparkles:
-
 A collection of functional utility libraries for TS/JS projects!
 
 ## Installation
@@ -9,17 +7,22 @@ A collection of functional utility libraries for TS/JS projects!
 To install the latest version:
 
 ```bash
-$ npm install tsfp --save-dev
+$ npm install --save-dev tsfp
+```
+
+Most likely you'll also need [the Immutable.js](https://github.com/facebook/immutable-js) library.
+
+```bash
+$ npm install --save-dev immutable
 ```
 
 ## Documentation
 
-TBC
+[Read the docs](http://tsfp.js.org) and taste the FP candies!
 
-### Contributing ###
+## Contributing
 
-If you'd like to contribute to TSFP, you'll need to run the following commands to get your
-environment set up:
+If you'd like to contribute to TSFP, you'll need to run the following commands to get your environment set up:
 
 ```bash
 $ git clone https://github.com/zhenwenc/tsfp.git
@@ -37,3 +40,8 @@ $ npm run docs              # generate documentation files
 
 `npm run watch:test` will watch for changes in the `/src/` and `/test/` directory, compile the
 source files when a change occurs. The output files are written to the `/dist/` directory. It will also re-run the unit tests every time you update any source files.
+
+
+## License
+
+`TSFP` is [MIT-licensed](./LICENSE).
