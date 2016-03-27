@@ -22,7 +22,6 @@
     "watch:test": "npm test -- --watch --watch-extensions ts --bail",
     "watch:build": "npm run build -- --watch",
     "typings-install": "typings install",
-    "postinstall": "npm run typings-install",
     "prepublish": "npm run build && babel dist/src --presets babel-preset-es2015 --out-dir lib && cp typings-ext.d.ts lib",
     "publishLocal": "npm pack"
   },
