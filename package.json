@@ -29,6 +29,12 @@
     "type": "git",
     "url": "git+https://github.com/zhenwenc/tsfp.git"
   },
+  "keywords": [
+    "tsfp",
+    "typescript",
+    "functional",
+    "immutable"
+  ],
   "author": "Zhenwen Cai <frederickcai@gmail.com>",
   "license": "MIT",
   "bugs": {
