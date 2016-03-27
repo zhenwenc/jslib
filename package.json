@@ -22,7 +22,10 @@
     "watch:test": "npm test -- --watch --watch-extensions ts --bail",
     "watch:build": "npm run build -- --watch",
     "typings-install": "typings install",
-    "prepublish": "npm run build && babel dist/src --presets babel-preset-es2015 --out-dir lib && cp typings-ext.d.ts lib",
+    "docs": "npm run docs:clean && npm run docs:build",
+    "docs:clean": "rimraf doc",
+    "docs:build": "typedoc --out doc --options typedoc.json --exclude '**/*.spec.ts' ./src/",
+    "prepublish": "npm run build && babel dist/src --presets babel-preset-es2015 --out-dir lib && cp typings-ext.d.ts lib && npm run docs",
     "publishLocal": "npm pack"
   },
   "repository": {
@@ -52,6 +55,7 @@
     "should": "^8.2.2",
     "ts-node": "^0.7.1",
     "tsc": "^1.20150623.0",
+    "typedoc": "^0.3.12",
     "typescript": "^1.9.0-dev.20160327",
     "typings": "^0.7.9"
   }
