@@ -25,7 +25,7 @@
     "docs:clean": "rimraf doc",
     "docs:build": "typedoc --out docs --options typedoc.json --exclude '**/*.spec.ts' ./src/",
     "docs:publish": "npm run docs:clean && npm run docs:build && cp CNAME docs && cd docs && git init && git commit --allow-empty -m 'update docs' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update docs' && git push git@github.com:zhenwenc/tsfp gh-pages --force",
-    "prepublish": "npm run build && babel dist/src --presets babel-preset-es2015 --out-dir lib && cp typings-ext.d.ts lib && npm run docs",
+    "prepublish": "npm run build && babel dist/src --presets babel-preset-es2015 --out-dir lib && rsync -avm --include='*.d.ts' -f 'hide,! */' dist/src/ lib && cp typings-ext.d.ts lib && npm run docs",
     "publishLocal": "npm pack"
   },
   "repository": {
