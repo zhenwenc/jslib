@@ -1,6 +1,6 @@
 {
   "name": "tsfp",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A collection of functional utility libraries for JS projects",
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
@@ -18,19 +18,19 @@
     "test": "mocha src/**/*.ts --require ts-node/register --reporter dot test/**/*.spec.ts",
     "build": "ntsc",
     "prebuild": "npm run clean:dist && npm run typings-install && tsconfig",
-    "watch": "npm run watch:build",
+    "watch": "npm run watch:test",
     "watch:test": "npm test -- --watch --watch-extensions ts --bail",
-    "watch:build": "npm run build -- --watch",
     "typings-install": "typings install",
     "docs": "npm run docs:clean && npm run docs:build",
     "docs:clean": "rimraf doc",
-    "docs:build": "typedoc --out doc --options typedoc.json --exclude '**/*.spec.ts' ./src/",
+    "docs:build": "typedoc --out docs --options typedoc.json --exclude '**/*.spec.ts' ./src/",
+    "docs:publish": "npm run docs:clean && npm run docs:build && cp CNAME docs && cd docs && git init && git commit --allow-empty -m 'update docs' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update docs' && git push git@github.com:zhenwenc/tsfp gh-pages --force",
     "prepublish": "npm run build && babel dist/src --presets babel-preset-es2015 --out-dir lib && cp typings-ext.d.ts lib && npm run docs",
     "publishLocal": "npm pack"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zhenwenc/tsfp.git"
+    "url": "https://github.com/zhenwenc/tsfp.git"
   },
   "keywords": [
     "tsfp",
@@ -43,7 +43,7 @@
   "bugs": {
     "url": "https://github.com/zhenwenc/tsfp/issues"
   },
-  "homepage": "https://github.com/zhenwenc/tsfp#readme",
+  "homepage": "http://tsfp.js.org",
   "devDependencies": {
     "babel-cli": "^6.6.5",
     "babel-core": "^6.6.4",
@@ -56,10 +56,7 @@
     "should": "^8.2.2",
     "ts-node": "^0.7.1",
     "typedoc": "^0.3.12",
-    "typescript": "^1.9.0-dev.20160327",
+    "typescript": "^1.8.9",
     "typings": "^0.7.9"
-  },
-  "dependencies": {
-    "ntypescript": "1.201603270104.1"
   }
 }

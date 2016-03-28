@@ -1,16 +1,18 @@
 {
+  "name": "TSFP",
   "mode": "modules",
   "theme": "default",
   "excludeExternals": true,
   "ignoreCompilerErrors": true,
+
+  "moduleResolution": "node",
+  "preserveConstEnums": true,
   "includeDeclarations": false,
   "experimentalDecorators": true,
   "emitDecoratorMetadata": true,
-  "target": "ES6",
-  "moduleResolution": "node",
-  "preserveConstEnums": true,
-  "stripInternal": true,
   "suppressExcessPropertyErrors": true,
   "suppressImplicitAnyIndexErrors": true,
+  "stripInternal": true,
+  "target": "ES6",
   "module": "commonjs"
 }
