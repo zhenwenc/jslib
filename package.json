@@ -1,6 +1,6 @@
 {
   "name": "tsfp",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "A collection of functional utility libraries for JS projects",
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
@@ -17,7 +17,7 @@
     "lint": "./node_modules/.bin/tslint 'src/**/*.ts'",
     "pretest": "tsc",
     "test": "mocha --reporter dot dist/test/**/*.spec.js",
-    "build": "tsc",
+    "build": "tsc -d",
     "prebuild": "npm run clean:dist",
     "watch": "npm run watch:test",
     "watch:test": "npm test -- --watch --watch-extensions ts --bail",
