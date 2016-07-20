@@ -139,7 +139,6 @@ describe('deepEqual', () => {
     })
     it('should compare Nothing and always return true', () => {
       expect(deepEqual(Nothing, Nothing)).to.be.true
-      expect(deepEqual(Maybe.Nothing, Nothing)).to.be.true
     })
   })
 
