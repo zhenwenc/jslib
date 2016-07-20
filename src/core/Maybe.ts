@@ -16,25 +16,6 @@ export abstract class Maybe<T> extends Record {
   }
 
   /**
-   * Returns a `Just` instance with the given value.
-   *
-   * @param  {Any}  value The value to wrap.
-   * @return {Just}       Returns a `Just`
-   */
-  static Just<F>(value: F): JustWrapper<F> {
-    return new JustWrapper(value)
-  }
-
-  /**
-   * Returns the singleton `Nothing` instance.
-   *
-   * @return {Nothing} Returns the singleton `Nothing`.
-   */
-  static get Nothing(): NothingWrapper {
-    return new NothingWrapper
-  }
-
-  /**
    * Constructs a new `Maybe` instance.
    *
    * If the value is either `null` or `undefined`, the function returns a
@@ -46,7 +27,7 @@ export abstract class Maybe<T> extends Record {
    */
   static of<F>(value: F): Maybe<F> {
     return (value === null || value === undefined)
-            ? Maybe.Nothing : Maybe.Just(value)
+            ? Nothing : Just(value)
   }
 
   /**
@@ -242,7 +223,7 @@ export abstract class Maybe<T> extends Record {
    * @return {Maybe}
    */
   map<F>(fn: (t: T) => F): Maybe<F> {
-    return this.isJust ? Maybe.Just(fn(this.get)) : new NothingWrapper
+    return this.isJust ? Just(fn(this.get)) : new NothingWrapper
   }
 
   /**
@@ -350,6 +331,19 @@ export class NothingWrapper extends Maybe<any> {
 
 // -- Aliases -----------------------------------------------------------------
 
-/* tslint:disable variable-name */
-export const Just = Maybe.Just
-export const Nothing = Maybe.Nothing
+/**
+ * Returns a `Just` instance with the given value.
+ *
+ * @param  {Any}  value The value to wrap.
+ * @return {Just}       Returns a `Just`
+ */
+export function Just<F>(value: F): JustWrapper<F> {
+  return new JustWrapper(value)
+}
+
+/**
+ * Returns the singleton `Nothing` instance.
+ *
+ * @return {Nothing} Returns the singleton `Nothing`.
+ */
+export const Nothing: NothingWrapper = new NothingWrapper

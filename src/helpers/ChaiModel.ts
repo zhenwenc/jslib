@@ -224,7 +224,7 @@ export function ChaiModel(chai: any, utils: any): any {
         })()
 
         if (expectedKeys.isEmpty())
-          throw new Error(`keys required, but got ${expected}`)
+          throw new Error(`expected keys required, but got ${expected}`)
 
         const checkAny      = utils.flag(this, 'any')
         const checkContains = utils.flag(this, 'contains')

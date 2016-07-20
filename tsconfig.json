@@ -1,46 +1,33 @@
 {
-    "compilerOptions": {
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "declaration": true,
-        "jsx": "react",
-        "module": "commonjs",
-        "noLib": false,
-        "removeComments": false,
-        "rootDir": ".",
-        "target": "es6",
-        "outDir": "dist",
-        "moduleResolution": "classic",
-        "noImplicitAny": false
-    },
-    "filesGlob": [
-        "src/**/*.ts",
-        "test/**/*.ts",
-        "typings-ext.d.ts",
-        "typings/browser.d.ts"
-    ],
-    "atom": {
-        "rewriteTsconfig": true
-    },
-    "files": [
-        "typings-ext.d.ts",
-        "typings/browser.d.ts",
-        "src/core/Either.ts",
-        "src/core/Equals.ts",
-        "src/core/Maybe.ts",
-        "src/core/Record.ts",
-        "src/helpers.ts",
-        "src/helpers/ChaiModel.ts",
-        "src/index.ts",
-        "src/utils.ts",
-        "src/utils/deepEqual.ts",
-        "src/utils/Hash.ts",
-        "src/utils/Immutable.ts",
-        "src/utils/Math.ts",
-        "test/core/Either.spec.ts",
-        "test/core/Maybe.spec.ts",
-        "test/helpers/ChaiModel.spec.ts",
-        "test/utils/deepEqual.spec.ts",
-        "test/utils/Hash.spec.ts"
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "noEmitHelpers": false,
+    "lib": [ "es6", "dom" ],
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "removeComments": false,
+    "baseUrl": "./src",
+    "outDir": "./dist",
+    "paths": [],
+    "types": [
+      "mocha"
     ]
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "awesomeTypescriptLoaderOptions": {
+    "forkChecker": true,
+    "useWebpackText": true
+  },
+  "compileOnSave": false,
+  "buildOnSave": false,
+  "atom": {
+    "rewriteTsconfig": false
+  }
 }

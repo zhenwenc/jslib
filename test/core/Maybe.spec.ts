@@ -4,18 +4,18 @@ import { Maybe, Just, Nothing } from '../../src/core/Maybe'
 describe('maybe', () => {
   describe('Maybe', () => {
     it('#isMaybe: should return true if the given value is a Just or Nothing', () => {
-      expect(Maybe.isMaybe(Maybe.Just('SomeValue'))).to.be.true
-      expect(Maybe.isMaybe(Maybe.Nothing)).to.be.true
+      expect(Maybe.isMaybe(Just('SomeValue'))).to.be.true
+      expect(Maybe.isMaybe(Nothing)).to.be.true
     })
 
     it('#isJust: should return true only if the given value is a Just', () => {
-      expect(Maybe.isJust(Maybe.Just('SomeValue'))).to.be.true
-      expect(Maybe.isJust(Maybe.Nothing)).to.be.false
+      expect(Maybe.isJust(Just('SomeValue'))).to.be.true
+      expect(Maybe.isJust(Nothing)).to.be.false
     })
 
     it('#isNothing: should return true only if the given value is a Nothing', () => {
-      expect(Maybe.isNothing(Maybe.Nothing)).to.be.true
-      expect(Maybe.isNothing(Maybe.Just('SomeValue'))).to.be.false
+      expect(Maybe.isNothing(Nothing)).to.be.true
+      expect(Maybe.isNothing(Just('SomeValue'))).to.be.false
     })
 
     it('#of: should return a Just if given argument is defined', () => {
