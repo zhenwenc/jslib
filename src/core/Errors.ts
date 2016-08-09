@@ -1,20 +1,16 @@
+/**
+ * Inheritable Error wrapper.
+ */
 
-export class BaseError extends Error {
+export class NcError extends Error {
   constructor (message?: string) {
     super()
     this.message = message
-    this.stack = new Error().stack
   }
 }
-BaseError.prototype = new Error()
+NcError.prototype = new Error()
 
-export class ServiceError extends BaseError {
-  constructor(message: string) {
-    super(message)
-  }
-}
-
-export class ClientError extends BaseError {
+export class NcSevere extends NcError {
   constructor(message: string) {
     super(message)
   }
