@@ -13,6 +13,11 @@ describe('maybe', () => {
       expect(Maybe.isJust(Nothing)).to.be.false
     })
 
+    it('#isDefined: should return true only if the given value is a Just', () => {
+      expect(Maybe.isDefined(Just('SomeValue'))).to.be.true
+      expect(Maybe.isDefined(Nothing)).to.be.false
+    })
+
     it('#isNothing: should return true only if the given value is a Nothing', () => {
       expect(Maybe.isNothing(Nothing)).to.be.true
       expect(Maybe.isNothing(Just('SomeValue'))).to.be.false
@@ -45,6 +50,11 @@ describe('maybe', () => {
     it('#isJust: should return true', () => {
       expect(Just('SomeValue').isJust).to.be.true
       expect(Nothing.isJust).to.be.false
+    })
+
+    it('#isDefined: should return true', () => {
+      expect(Just('SomeValue').isDefined).to.be.true
+      expect(Nothing.isDefined).to.be.false
     })
 
     it('#get: should return the defined value', () => {

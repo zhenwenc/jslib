@@ -62,6 +62,15 @@ export abstract class Maybe<T> extends Record {
   }
 
   /**
+   * Check if `value` is `Just`.
+   *
+   * Alias to Maybe#isJust
+   */
+  static isDefined(value: any): boolean {
+    return Maybe.isJust(value);
+  }
+
+  /**
    * Check if `value` is `Nothing`.
    *
    * @param  {Any}     value The value to check.
@@ -161,6 +170,15 @@ export abstract class Maybe<T> extends Record {
    */
   get isEmpty(): boolean {
     return Maybe.isEmpty(this)
+  }
+
+  /**
+   * Return `true` if this is a `Just` instance. Otherwise, return `false`.
+   *
+   * @return {Boolean}
+   */
+  get isDefined(): boolean {
+    return Maybe.isDefined(this)
   }
 
   /**
