@@ -1,6 +1,9 @@
 {
   "name": "tsfp",
-  "version": "0.1.9",
+  "version": "0.1.16",
+  "publishConfig": {
+    "tag": "next"
+  },
   "description": "A collection of functional utility libraries for JS projects",
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
