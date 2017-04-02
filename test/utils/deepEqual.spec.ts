@@ -21,7 +21,7 @@ describe('deepEqual', () => {
       expect(deepEqual(true, false)).to.false
     })
     it('should compare native JS object correctly', () => {
-      const newJS = () => { return { a: 1, b: 'foo' }}
+      const newJS = () => { return { a: 1, b: 'foo' } }
       expect(deepEqual(newJS(), newJS())).to.be.true
     })
   })
@@ -172,10 +172,10 @@ describe('deepEqual', () => {
       expect(deepEqual(newRight({ x: 5 }).right, newRight({ x: 9 }).right)).to.be.false
     })
     it('should compare Right with immutable object correctly', () => {
-      const newList  = (o: number[]) => Right<Error, List<number>>(List(o))
-      const newSet   = (o: number[]) => Right<Error, Set<number>>(Set(o))
+      const newList = (o: number[]) => Right<Error, List<number>>(List(o))
+      const newSet = (o: number[]) => Right<Error, Set<number>>(Set(o))
       const newStack = (o: number[]) => Right<Error, Stack<number>>(Stack(o))
-      const newMap   = (o: {[idx: string]: number}) => {
+      const newMap = (o: { [idx: string]: number }) => {
         return Right<Error, Map<string, number>>(Map(o))
       }
 

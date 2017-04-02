@@ -1,1 +1,1 @@
-export * from './helpers/ChaiModel'
+export * from './helpers/ChaiModel';

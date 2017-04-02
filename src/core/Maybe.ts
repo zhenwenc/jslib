@@ -1,18 +1,16 @@
-'use strict'
-
-import { Either, Left, Right } from './Either'
-import { Record } from './Record'
-import { deepEqual } from '../utils/deepEqual'
+import { Either, Left, Right } from './Either';
+import { Record } from './Record';
+import { deepEqual } from '../utils/deepEqual';
 
 // -- Maybe Class -------------------------------------------------------------
 
 export abstract class Maybe<T> extends Record {
 
-  protected value: T
+  protected value: T;
 
   constructor(value: T) {
-    super()
-    this.value = value
+    super();
+    this.value = value;
   }
 
   /**
@@ -27,7 +25,7 @@ export abstract class Maybe<T> extends Record {
    */
   static of<F>(value: F): Maybe<F> {
     return (value === null || value === undefined)
-            ? Nothing : Just(value)
+      ? Nothing : Just(value);
   }
 
   /**
@@ -38,7 +36,7 @@ export abstract class Maybe<T> extends Record {
    * @return {Maybe}
    */
   static eval<F>(fn: () => F): Maybe<F> {
-    return Maybe.of(fn.apply(undefined))
+    return Maybe.of(fn.apply(undefined));
   }
 
   /**
@@ -48,7 +46,7 @@ export abstract class Maybe<T> extends Record {
    * @return {Boolean}       Returns `true` if `value` is subtype of `Maybe`
    */
   static isMaybe(value: any): boolean {
-    return value instanceof Maybe
+    return value instanceof Maybe;
   }
 
   /**
@@ -58,7 +56,7 @@ export abstract class Maybe<T> extends Record {
    * @return {Boolean}
    */
   static isJust(value: any): boolean {
-    return value instanceof JustWrapper
+    return value instanceof JustWrapper;
   }
 
   /**
@@ -77,7 +75,7 @@ export abstract class Maybe<T> extends Record {
    * @return {Boolean}
    */
   static isNothing(value: any): boolean {
-    return value instanceof NothingWrapper
+    return value instanceof NothingWrapper;
   }
 
   /**
@@ -89,7 +87,7 @@ export abstract class Maybe<T> extends Record {
   static isEmpty(value: Maybe<any>): boolean {
     return Maybe.isNothing(value)
       || value.get === null
-      || value.get === undefined
+      || value.get === undefined;
   }
 
   /**
@@ -102,11 +100,11 @@ export abstract class Maybe<T> extends Record {
    */
   static run<F>(gen: IterableIterator<Maybe<F>>): Maybe<F> {
     function next(value) {
-      const result = gen.next(value)
-      if (result.done) return result.value || Maybe.of(value)
-      return result.value.flatMap(next)
+      const result = gen.next(value);
+      if (result.done) { return result.value || Maybe.of(value); }
+      return result.value.flatMap(next);
     }
-    return next(null)
+    return next(null);
   }
 
   /**
@@ -118,11 +116,11 @@ export abstract class Maybe<T> extends Record {
    * @param {Maybe} b
    * @return {Maybe}
    */
-  static lift2<A,B,C>(f: (A, B) => C, a: Maybe<A>, b: Maybe<B>): Maybe<C> {
+  static lift2<A, B, C>(f: (A, B) => C, a: Maybe<A>, b: Maybe<B>): Maybe<C> {
     if (a.isJust && b.isJust) {
-      return Just(f(a.get, b.get))
+      return Just(f(a.get, b.get));
     } else {
-      return Nothing
+      return Nothing;
     }
   }
 
@@ -136,11 +134,11 @@ export abstract class Maybe<T> extends Record {
    * @param {Maybe} c
    * @return {Maybe}
    */
-  static lift3<A,B,C,D>(f: (A, B, C) => D, a: Maybe<A>, b: Maybe<B>, c: Maybe<C>): Maybe<D> {
+  static lift3<A, B, C, D>(f: (A, B, C) => D, a: Maybe<A>, b: Maybe<B>, c: Maybe<C>): Maybe<D> {
     if (a.isJust && b.isJust && c.isJust) {
-      return Just(f(a.get, b.get, c.get))
+      return Just(f(a.get, b.get, c.get));
     } else {
-      return Nothing
+      return Nothing;
     }
   }
 
@@ -150,7 +148,7 @@ export abstract class Maybe<T> extends Record {
    * @return {Boolean} Returns `true` if this is a `Just` instance
    */
   get isJust(): boolean {
-    return Maybe.isJust(this)
+    return Maybe.isJust(this);
   }
 
   /**
@@ -159,7 +157,7 @@ export abstract class Maybe<T> extends Record {
    * @return {Boolean} Returns `true` if this is a `Nothing` instance
    */
   get isNothing(): boolean {
-    return Maybe.isNothing(this)
+    return Maybe.isNothing(this);
   }
 
   /**
@@ -169,7 +167,7 @@ export abstract class Maybe<T> extends Record {
    * @return {Boolean}
    */
   get isEmpty(): boolean {
-    return Maybe.isEmpty(this)
+    return Maybe.isEmpty(this);
   }
 
   /**
@@ -178,7 +176,7 @@ export abstract class Maybe<T> extends Record {
    * @return {Boolean}
    */
   get isDefined(): boolean {
-    return Maybe.isDefined(this)
+    return Maybe.isDefined(this);
   }
 
   /**
@@ -187,14 +185,12 @@ export abstract class Maybe<T> extends Record {
    * @return {Any}
    */
   get get() {
-    if (this.isNothing)
-      throw Error(`Can't get value from Nothing.`)
-    else
-      return this.value
+    if (this.isNothing) { throw Error(`Can't get value from Nothing.`); }
+    return this.value;
   }
 
   toString() {
-    return `Maybe(${this.value})`
+    return `Maybe(${this.value})`;
   }
 
   // -- Functions -------------------------------------------------------------
@@ -207,7 +203,7 @@ export abstract class Maybe<T> extends Record {
    * @return {Any}
    */
   getOrElse(or: T) {
-    return this.isNothing ? or : this.get
+    return this.isNothing ? or : this.get;
   }
 
   /**
@@ -218,8 +214,8 @@ export abstract class Maybe<T> extends Record {
    * @return {Any}
    */
   getOrThrow(err: Error) {
-    if (this.isJust) return this.get
-    else throw err
+    if (this.isJust) { return this.get; }
+    throw err;
   }
 
   /**
@@ -230,7 +226,7 @@ export abstract class Maybe<T> extends Record {
    * @return {Maybe}
    */
   orElse<F extends T>(alt: () => Maybe<F>): Maybe<T> {
-    return this.isNothing ? alt.apply(undefined) : this
+    return this.isNothing ? alt.apply(undefined) : this;
   }
 
   /**
@@ -241,7 +237,7 @@ export abstract class Maybe<T> extends Record {
    * @return {Maybe}
    */
   map<F>(fn: (t: T) => F): Maybe<F> {
-    return this.isJust ? Just(fn(this.get)) : new NothingWrapper
+    return this.isJust ? Just(fn(this.get)) : new NothingWrapper;
   }
 
   /**
@@ -255,7 +251,7 @@ export abstract class Maybe<T> extends Record {
    * @return {Maybe}
    */
   flatMap<F>(fn: (t: T) => Maybe<F>): Maybe<F> {
-    return this.isJust ? fn(this.get) : new NothingWrapper
+    return this.isJust ? fn(this.get) : new NothingWrapper;
   }
 
   /**
@@ -267,7 +263,7 @@ export abstract class Maybe<T> extends Record {
    * @return {Any}
    */
   fold<F>(ifEmpty: () => F, f: (t: T) => F): F {
-    return this.isJust ? f(this.get) : ifEmpty()
+    return this.isJust ? f(this.get) : ifEmpty();
   }
 
   /**
@@ -281,7 +277,7 @@ export abstract class Maybe<T> extends Record {
    * @return {Function}
    */
   chain<F>(fn: (T) => Maybe<F>): () => Maybe<F> {
-    return this.isJust ? (() => fn(this.get)) : (() => new NothingWrapper)
+    return this.isJust ? (() => fn(this.get)) : (() => new NothingWrapper);
   }
 
   /**
@@ -293,7 +289,7 @@ export abstract class Maybe<T> extends Record {
    * @return {Maybe}
    */
   toRight<G>(left: G): Either<G, T> {
-    return this.isJust ? Right<G, T>(this.get) : Left<G, T>(left)
+    return this.isJust ? Right<G, T>(this.get) : Left<G, T>(left);
   }
 
   /**
@@ -305,7 +301,7 @@ export abstract class Maybe<T> extends Record {
    * @return {Maybe}
    */
   toLeft<G>(right: G): Either<T, G> {
-    return this.isJust ? Left<T, G>(this.get) : Right<T, G>(right)
+    return this.isJust ? Left<T, G>(this.get) : Right<T, G>(right);
   }
 
 }
@@ -315,34 +311,34 @@ export abstract class Maybe<T> extends Record {
 export class JustWrapper<T> extends Maybe<T> {
 
   constructor(value: T) {
-    super(value)
+    super(value);
   }
 
   toString() {
-    return `Just(${this.value})`
+    return `Just(${this.value})`;
   }
 
   equals(that: any) {
     return Maybe.isJust(that)
-      && deepEqual(that.value, this.value)
+      && deepEqual(that.value, this.value);
   }
 
 }
 
- // -- Nothing Class ----------------------------------------------------------
+// -- Nothing Class ----------------------------------------------------------
 
 export class NothingWrapper extends Maybe<any> {
 
   constructor() {
-    super(undefined)
+    super(undefined);
   }
 
   toString() {
-    return 'Nothing'
+    return 'Nothing';
   }
 
   equals(that: any) {
-    return Maybe.isNothing(that)
+    return Maybe.isNothing(that);
   }
 
 }
@@ -356,7 +352,7 @@ export class NothingWrapper extends Maybe<any> {
  * @return {Just}       Returns a `Just`
  */
 export function Just<F>(value: F): JustWrapper<F> {
-  return new JustWrapper(value)
+  return new JustWrapper(value);
 }
 
 /**
@@ -364,4 +360,4 @@ export function Just<F>(value: F): JustWrapper<F> {
  *
  * @return {Nothing} Returns the singleton `Nothing`.
  */
-export const Nothing: NothingWrapper = new NothingWrapper
+export const Nothing: NothingWrapper = new NothingWrapper;

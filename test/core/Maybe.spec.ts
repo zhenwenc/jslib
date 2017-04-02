@@ -83,7 +83,7 @@ describe('maybe', () => {
     })
 
     it('#map: should return a Just with the returned value of the given function', () => {
-      const maybe  = Just('Hello ')
+      const maybe = Just('Hello ')
       const kitten = 'Kitten!'
       expect(maybe.map(x => x + kitten)).to.be.eql(Just('Hello Kitten!'))
     })

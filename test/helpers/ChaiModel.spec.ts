@@ -1,5 +1,3 @@
-'use strict'
-
 import { expect, use } from 'chai'
 import { Map, List, OrderedSet, Set, Stack } from 'immutable'
 
@@ -19,7 +17,7 @@ describe('ChaiSpec', () => {
       // check non-empty collections
       expect(List.of(1, 2, 3)).to.be.not.empty
       expect(Map({ a: 'x' })).to.be.not.empty
-      expect(OrderedSet([ false ])).to.be.not.empty
+      expect(OrderedSet([false])).to.be.not.empty
     })
     it('should check native JS objects correctly', () => {
       expect([]).to.be.empty
@@ -71,9 +69,9 @@ describe('ChaiSpec', () => {
       expect(Right<Error, number>(1)).to.eq(Right<Error, number>(1))
       expect(Right<Error, string>('foo')).to.eq(Right<Error, string>('foo'))
       expect(Right<Error, boolean>(true)).to.eq(Right<Error, boolean>(true))
-      expect(Right<Error, {[idx: string]: number}>({
+      expect(Right<Error, { [idx: string]: number }>({
         x: Math.PI
-      })).to.eq(Right<Error, {[idx: string]: number}>({
+      })).to.eq(Right<Error, { [idx: string]: number }>({
         x: Math.PI
       }))
     })

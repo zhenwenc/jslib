@@ -4,12 +4,12 @@
  */
 
 export function canEquals(that: any) {
-  return that && typeof that.equals === 'function'
+  return that && typeof that.equals === 'function';
 }
 
 export interface Equals {
   /**
    * The universal equality method, should consider deep equals.
    */
-  equals(that: any): boolean
+  equals(that: any): boolean;
 }

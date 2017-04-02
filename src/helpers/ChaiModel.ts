@@ -6,25 +6,25 @@
  * Reference: https://github.com/astorije/chai-immutable
  */
 
-import * as _ from 'lodash'
-import { Iterable, List } from 'immutable'
-import { Either } from '../core/Either'
-import { canEquals } from '../core/Equals'
-import { deepEqual } from '../utils/deepEqual'
-import { isSet, isList, isStack } from '../utils/Immutable'
+import * as _ from 'lodash';
+import { Iterable, List } from 'immutable';
+import { Either } from '../core/Either';
+import { canEquals } from '../core/Equals';
+import { deepEqual } from '../utils/deepEqual';
+import { isSet, isList, isStack } from '../utils/Immutable';
 
-type KeyedIterable = Iterable.Keyed<string | number, any>
+type KeyedIterable = Iterable.Keyed<string | number, any>;
 
-const isIterable = Iterable.isIterable
-const asIterable = (o: any) => o as Iterable<any, any>
+const isIterable = Iterable.isIterable;
+const asIterable = (o: any) => o as Iterable<any, any>;
 
-const isKeyedIterable = Iterable.isKeyed
-const asKeyedIterable = (o: any) => o as Iterable.Keyed<any, any>
+const isKeyedIterable = Iterable.isKeyed;
+const asKeyedIterable = (o: any) => o as Iterable.Keyed<any, any>;
 
 export function ChaiModel(chai: any, utils: any): any {
 
-  /* tslint:disable variable-name */
-  const Assertion = chai.Assertion
+  /* tslint:disable variable-name no-unused-expression */
+  const Assertion = chai.Assertion;
 
   /**
    * ### .empty
@@ -43,17 +43,16 @@ export function ChaiModel(chai: any, utils: any): any {
   Assertion.overwriteProperty('empty', (_super) => {
     return function() {
       if (isIterable(this._obj)) {
-        const size = asIterable(this._obj).size
+        const size = asIterable(this._obj).size;
         this.assert(
           size === 0,
           'expected immutable #{this} to be empty but got size #{act}',
           'expected immutable #{this} to not be empty',
-          0, size
-        )
-      }
-      else _super.apply(this, arguments)
-    }
-  })
+          0, size,
+        );
+      } else { _super.apply(this, arguments); }
+    };
+  });
 
   /**
    * ### .equal(collection)
@@ -82,32 +81,32 @@ export function ChaiModel(chai: any, utils: any): any {
   function assertCollectionEqual(_super) {
     return function(expected) {
       if (isIterable(expected) && isIterable(this._obj)) {
-        const actual = asIterable(this._obj)
+        const actual = asIterable(this._obj);
 
         this.assert(
           _.isEqual(actual.toJS(), expected.toJS()),
           'expected immutable #{act} to equal #{exp}',
           'expected immutable #{act} to not equal #{exp}',
-          expected, actual, true
-        )
+          expected, actual, true,
+        );
       }
       else if (canEquals(expected) && canEquals(this._obj)) {
-        const actual = this._obj
+        const actual = this._obj;
 
         this.assert(
           deepEqual(actual, expected),
           'expected #{act} to equal #{exp}',
           'expected #{act} to not equal #{exp}',
-          expected, actual, true
-        )
+          expected, actual, true,
+        );
       }
-      else _super.apply(this, arguments)
-    }
+      else { _super.apply(this, arguments); }
+    };
   }
 
   ['eq', 'eql', 'eqls', 'equal', 'equals'].forEach(keyword => {
-    Assertion.overwriteMethod(keyword, assertCollectionEqual)
-  })
+    Assertion.overwriteMethod(keyword, assertCollectionEqual);
+  });
 
   /**
    * ### .include(value)
@@ -135,29 +134,29 @@ export function ChaiModel(chai: any, utils: any): any {
   function assertCollectionInclude(_super) {
     return function(expected) {
       if (isIterable(this._obj)) {
-        const actual = asIterable(this._obj)
+        const actual = asIterable(this._obj);
         this.assert(
           (v) => _.isEqual(v, expected),
           'expected immutable #{act} to include #{exp}',
           'expected immutable #{act} to not include #{exp}',
-          expected, actual.toJS()
-        )
+          expected, actual.toJS(),
+        );
       }
-      else _super.apply(this, arguments)
-    }
+      else { _super.apply(this, arguments); }
+    };
   }
 
   function chainCollectionInclude(_super) {
-    return function() { _super.apply(this, arguments) }
+    return function() { _super.apply(this, arguments); };
   }
 
   ['include', 'contain', 'contains', 'includes'].forEach(keyword => {
     Assertion.overwriteChainableMethod(
       keyword,
       assertCollectionInclude,
-      chainCollectionInclude
-    )
-  })
+      chainCollectionInclude,
+    );
+  });
 
   /**
    * ### .keys(key1[, key2, ...[, keyN]])
@@ -205,58 +204,58 @@ export function ChaiModel(chai: any, utils: any): any {
   function assertKeyedCollectionKeys(_super) {
     return function(expected) {
       if (isKeyedIterable(this._obj)) {
-        const actual       = asKeyedIterable(this._obj)
-        const actualKeys   = List(actual.keys())
+        const actual = asKeyedIterable(this._obj);
+        const actualKeys = List(actual.keys());
         const expectedKeys = (() => {
           switch (utils.type(expected)) {
             case 'object':
               if (!isSet(expected) && !isList(expected) && !isStack(expected))
                 throw new TypeError(
                   `Invalid expected keys, must be either List, Set, Stack, array, ` +
-                  `or primitive datatype. But got ${expected}`
-                )
-              return List(expected)
+                  `or primitive datatype. But got ${expected}`,
+                );
+              return List(expected);
             case 'array':
-              return List(expected)
+              return List(expected);
             default:
-              return List(Array.prototype.slice.call(arguments))
+              return List(Array.prototype.slice.call(arguments));
           }
-        })()
+        })();
 
         if (expectedKeys.isEmpty())
-          throw new Error(`expected keys required, but got ${expected}`)
+          throw new Error(`expected keys required, but got ${expected}`);
 
-        const checkAny      = utils.flag(this, 'any')
-        const checkContains = utils.flag(this, 'contains')
-        const checkNegate   = utils.flag(this, 'negate')
-        const strPredicate  = checkContains ? 'contain' : 'have'
+        const checkAny = utils.flag(this, 'any');
+        const checkContains = utils.flag(this, 'contains');
+        const checkNegate = utils.flag(this, 'negate');
+        const strPredicate = checkContains ? 'contain' : 'have';
 
-        const predicate     = (value) => actualKeys.includes(value)
+        const predicate = (value) => actualKeys.includes(value);
 
         const result = (function() {
           if (checkAny || checkContains) {
             return actualKeys.some(predicate, expectedKeys)
-              && !checkNegate
+              && !checkNegate;
           } else {
             return actualKeys.every(predicate, expectedKeys)
               && actualKeys.size === expectedKeys.size
-              && !checkNegate
+              && !checkNegate;
           }
-        })()
+        })();
 
         this.assert(
           result,
           `expected immutable #{this} to ${strPredicate} keys #{exp} but got #{act}`,
           `expected immutable #{this} to not ${strPredicate} keys #{exp} but got #{act}`,
-          expectedKeys, actualKeys
-        )
+          expectedKeys, actualKeys,
+        );
       }
-      else _super.apply(this, arguments)
-    }
+      else _super.apply(this, arguments);
+    };
   }
 
-  Assertion.overwriteMethod('keys', assertKeyedCollectionKeys)
-  Assertion.overwriteMethod('key', assertKeyedCollectionKeys)
+  Assertion.overwriteMethod('keys', assertKeyedCollectionKeys);
+  Assertion.overwriteMethod('key', assertKeyedCollectionKeys);
 
   /**
    * ### .size(value)
@@ -291,113 +290,113 @@ export function ChaiModel(chai: any, utils: any): any {
    */
 
   interface Comparator {
-    fn: (act: number, exp: number) => boolean,
-    name: string
+    fn: (act: number, exp: number) => boolean;
+    name: string;
   }
 
   const Comparator = {
     eq: {
       fn: (act: number, exp: number) => act == exp,
-      name: 'equals'
+      name: 'equals',
     },
     gte: {
       fn: (act: number, exp: number) => act >= exp,
-      name: 'greater than or equals to'
+      name: 'greater than or equals to',
     },
     lte: {
       fn: (act: number, exp: number) => act <= exp,
-      name: 'less than or equals to'
+      name: 'less than or equals to',
     },
     gt: {
       fn: (act: number, exp: number) => act > exp,
-      name: 'greater than'
+      name: 'greater than',
     },
     lt: {
       fn: (act: number, exp: number) => act < exp,
-      name: 'less than'
-    }
-  }
+      name: 'less than',
+    },
+  };
 
   function getCollectionSize(o: any) {
-    return isIterable(o) ? asIterable(o).size : _.size(o)
+    return isIterable(o) ? asIterable(o).size : _.size(o);
   }
 
   function assertCollectionSize(that: any, expected: number, comparator: Comparator) {
-    const actual = getCollectionSize(that._obj)
+    const actual = getCollectionSize(that._obj);
 
     that.assert(
       comparator.fn(actual, expected),
       `expected immutable #{this} to have size ${comparator.name} #{exp} but got #{act}`,
       `expected immutable #{this} to not have size ${comparator.name} #{exp}`,
-      expected, actual, true
-    )
+      expected, actual, true,
+    );
   }
 
   function assertCollectionSizeEq(_super) {
     return function(expected: number) {
-      assertCollectionSize(this, expected, Comparator.eq)
-    }
+      assertCollectionSize(this, expected, Comparator.eq);
+    };
   }
 
   function assertCollectionSizeGte(_super) {
     return function(expected: number) {
-      assertCollectionSize(this, expected, Comparator.gte)
-    }
+      assertCollectionSize(this, expected, Comparator.gte);
+    };
   }
 
   function assertCollectionSizeLte(_super) {
     return function(expected: number) {
-      assertCollectionSize(this, expected, Comparator.lte)
-    }
+      assertCollectionSize(this, expected, Comparator.lte);
+    };
   }
 
   function assertCollectionSizeGt(_super) {
     return function(expected: number) {
-      assertCollectionSize(this, expected, Comparator.gt)
-    }
+      assertCollectionSize(this, expected, Comparator.gt);
+    };
   }
 
   function assertCollectionSizeLt(_super) {
     return function(expected: number) {
-      assertCollectionSize(this, expected, Comparator.lt)
-    }
+      assertCollectionSize(this, expected, Comparator.lt);
+    };
   }
 
   function assertCollectionSizeWithin(_super) {
     return function(min: number, max: number) {
-      const size = getCollectionSize(this._obj)
+      const size = getCollectionSize(this._obj);
 
       this.assert(
         min <= size && size <= max,
         'expected immutable #{this} to have a size within #{exp} but got #{act}',
         'expected immutable #{this} to not have a size within #{exp} but got #{act}',
-        min + '..' + max, size
-      )
-    }
+        min + '..' + max, size,
+      );
+    };
   }
 
   function chainCollectionSize() {
-    utils.flag(this, 'immutable.collection.size', true)
+    utils.flag(this, 'immutable.collection.size', true);
   }
 
-  Assertion.overwriteMethod('sizeOf', assertCollectionSizeEq)
-  Assertion.overwriteMethod('lengthOf', assertCollectionSizeEq)
+  Assertion.overwriteMethod('sizeOf', assertCollectionSizeEq);
+  Assertion.overwriteMethod('lengthOf', assertCollectionSizeEq);
 
-  Assertion.overwriteMethod('gte', assertCollectionSizeGte)
-  Assertion.overwriteMethod('least', assertCollectionSizeGte)
+  Assertion.overwriteMethod('gte', assertCollectionSizeGte);
+  Assertion.overwriteMethod('least', assertCollectionSizeGte);
 
-  Assertion.overwriteMethod('lte', assertCollectionSizeLte)
-  Assertion.overwriteMethod('most', assertCollectionSizeLte)
+  Assertion.overwriteMethod('lte', assertCollectionSizeLte);
+  Assertion.overwriteMethod('most', assertCollectionSizeLte);
 
-  Assertion.overwriteMethod('gt', assertCollectionSizeGt)
-  Assertion.overwriteMethod('above', assertCollectionSizeGt)
-  Assertion.overwriteMethod('greaterThan', assertCollectionSizeGt)
+  Assertion.overwriteMethod('gt', assertCollectionSizeGt);
+  Assertion.overwriteMethod('above', assertCollectionSizeGt);
+  Assertion.overwriteMethod('greaterThan', assertCollectionSizeGt);
 
-  Assertion.overwriteMethod('lt', assertCollectionSizeLt)
-  Assertion.overwriteMethod('below', assertCollectionSizeLt)
-  Assertion.overwriteMethod('lessThan', assertCollectionSizeLt)
+  Assertion.overwriteMethod('lt', assertCollectionSizeLt);
+  Assertion.overwriteMethod('below', assertCollectionSizeLt);
+  Assertion.overwriteMethod('lessThan', assertCollectionSizeLt);
 
-  Assertion.overwriteMethod('within', assertCollectionSizeWithin)
+  Assertion.overwriteMethod('within', assertCollectionSizeWithin);
 
   /**
    * ### .error(constructor)
@@ -427,34 +426,34 @@ export function ChaiModel(chai: any, utils: any): any {
   function assertErrorEquals(expected, actual, errMsg?: string | RegExp, msg?: string) {
     // CASE: Expected to be a desired error
     if (expected && expected instanceof Error) {
-      const expError = expected as Error
+      const expError = expected as Error;
       this.assert(
         _.eq(expError.name, actual.name) &&
         _.eq(expError.message, actual.message),
         'expected error to equal #{exp} but got #{act}',
         'expected error to not equal #{exp} but got #{act}',
-        expError, actual
-      )
-      return this
+        expError, actual,
+      );
+      return this;
     }
 
     // CASE: Expected to be of a desired error type
     if (typeof expected === 'function') {
-      let name = expected.prototype.name
+      let name = expected.prototype.name;
       if (!name || (name == 'Error' && expected !== Error)) {
-        name = expected.name || (new expected()).name
+        name = expected.name || (new expected()).name;
       }
       this.assert(
         _.eq(name, actual.name),
         'expected #{this} with type #{exp} but got #{act}',
         'expected #{this} not with type #{exp} but got #{act}',
-        name, actual.name
-      )
-      if (!errMsg) return this
+        name, actual.name,
+      );
+      if (!errMsg) return this;
     }
 
-    const expMsg = _.isFunction(expected) ? errMsg : expected
-    const actMsg = "message" in actual ? actual.message : '' + actual
+    const expMsg = _.isFunction(expected) ? errMsg : expected;
+    const actMsg = 'message' in actual ? actual.message : '' + actual;
 
     // CASE: Expected to have error message matches regex
     if (!_.isNil(actMsg) && !!expMsg && expMsg instanceof RegExp) {
@@ -462,9 +461,9 @@ export function ChaiModel(chai: any, utils: any): any {
         expMsg.exec(actMsg),
         'expected #{this} to have error message matching #{exp} but got #{act}',
         'expected #{this} to have error message not matching #{exp}',
-        expMsg, actMsg
-      )
-      return this
+        expMsg, actMsg,
+      );
+      return this;
     }
 
     // CASE: Expected to have error message includes string
@@ -473,54 +472,54 @@ export function ChaiModel(chai: any, utils: any): any {
         ~expMsg.indexOf(actMsg),
         'expected #{this} to have error message including #{exp} but got #{act}',
         'expected #{this} to have error message not including #{act}',
-        expMsg, actMsg
-      )
-      return this
+        expMsg, actMsg,
+      );
+      return this;
     }
 
     // CASE: Unknown case
     else {
-      throw new Error('Must specify expected message or regex.' + errMsg)
+      throw new Error('Must specify expected message or regex.' + errMsg);
     }
   }
 
   function assertError(expected: any, errMsg?: string | RegExp, msg?: string) {
     if (arguments.length === 0) {
-      throw new Error('Must have expected error.')
+      throw new Error('Must have expected error.');
     }
-    if (!!msg) utils.flag(this, 'message', msg)
+    if (!!msg) utils.flag(this, 'message', msg);
 
-    const actual = utils.flag(this, 'object')
-    new Assertion(actual, msg).is.a('error')
+    const actual = utils.flag(this, 'object');
+    new Assertion(actual, msg).is.a('error');
 
-    return assertErrorEquals.bind(this)(expected, actual, errMsg, msg)
+    return assertErrorEquals.bind(this)(expected, actual, errMsg, msg);
   }
 
   function assertErrorOnLeft(expected: any, errMsg?: string | RegExp, msg?: string) {
     if (arguments.length === 0) {
-      throw new Error('Must have expected error.')
+      throw new Error('Must have expected error.');
     }
-    if (!!msg) utils.flag(this, 'message', msg)
+    if (!!msg) utils.flag(this, 'message', msg);
 
-    const actual = utils.flag(this, 'object')
+    const actual = utils.flag(this, 'object');
     new Assertion(
       Either.isLeft(actual),
-      `expected an Either.Left instance, but got ${this}`
-    ).to.be.true
+      `expected an Either.Left instance, but got ${this}`,
+    ).to.be.true;
 
-    return assertErrorEquals.bind(this)(expected, actual.left.get, errMsg, msg)
+    return assertErrorEquals.bind(this)(expected, actual.left.get, errMsg, msg);
   }
 
-  Assertion.addMethod('error', assertError)
-  Assertion.addMethod('errorOnLeft', assertErrorOnLeft)
+  Assertion.addMethod('error', assertError);
+  Assertion.addMethod('errorOnLeft', assertErrorOnLeft);
 
   /**
    * ## TDD API Reference
    */
 
-  const assert = chai.assert
-  const originalEqual = assert.equal
-  const originalNotEqual = assert.notEqual
+  const assert = chai.assert;
+  const originalEqual = assert.equal;
+  const originalNotEqual = assert.notEqual;
 
   /**
    * ### .equal(actual, expected)
@@ -549,10 +548,10 @@ export function ChaiModel(chai: any, utils: any): any {
 
   assert.equal = (actual, expected) => {
     if (isIterable(actual)) {
-      return new Assertion(actual).equal(expected)
+      return new Assertion(actual).equal(expected);
     }
-    else return originalEqual(actual, expected)
-  }
+    else return originalEqual(actual, expected);
+  };
 
   /**
    * ### .notEqual(actual, expected)
@@ -575,10 +574,10 @@ export function ChaiModel(chai: any, utils: any): any {
 
   assert.notEqual = (actual, expected) => {
     if (isIterable(actual)) {
-      return new Assertion(actual).not.equal(expected)
+      return new Assertion(actual).not.equal(expected);
     }
-    else return originalNotEqual(actual, expected)
-  }
+    else return originalNotEqual(actual, expected);
+  };
 
   /**
    * ### .sizeOf(collection, length)
@@ -597,7 +596,7 @@ export function ChaiModel(chai: any, utils: any): any {
    */
 
   assert.sizeOf = (collection, expected) => {
-    new Assertion(collection).size(expected)
-  }
+    new Assertion(collection).size(expected);
+  };
 
 }
