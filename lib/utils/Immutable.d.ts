@@ -1,0 +1,10 @@
+export declare function isImmutable(thing: any): boolean;
+export declare function isList(thing: any): boolean;
+export declare function isMap(thing: any): boolean;
+export declare function isSet(thing: any): boolean;
+export declare function isStack(thing: any): boolean;
+export declare function isKeyed(thing: any): boolean;
+export declare function isIndexed(thing: any): boolean;
+export declare function isOrdered(thing: any): boolean;
+export declare function isOrderedSet(thing: any): boolean;
+export declare function isOrderedMap(thing: any): boolean;

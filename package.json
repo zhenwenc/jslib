@@ -1,5 +1,5 @@
 {
-  "name": "jslib",
+  "name": "@navch/jslib",
   "version": "0.1.16",
   "publishConfig": {
     "tag": "next"
@@ -18,18 +18,17 @@
     "clean": "npm cache clean && rimraf node_modules doc typings coverage dist",
     "clean:dist": "rimraf lib dist coverage",
     "lint": "./node_modules/.bin/tslint 'src/**/*.ts'",
-    "pretest": "tsc",
+    "pretest": "npm run build",
     "test": "mocha --reporter dot dist/test/**/*.spec.js",
     "build": "tsc -d",
     "prebuild": "npm run clean:dist",
+    "postbuild": "babel dist/src -s --presets babel-preset-es2015 --out-dir lib && rsync -avm --include='*.d.ts' -f 'hide,! */' dist/src/ lib && cp typings-ext.d.ts lib",
     "watch": "npm run watch:test",
     "watch:test": "npm test -- --watch --watch-extensions ts --bail",
     "docs": "npm run docs:clean && npm run docs:build",
     "docs:clean": "rimraf doc",
     "docs:build": "typedoc --out docs --options typedoc.json --exclude '**/*.spec.ts' ./src/",
-    "docs:publish": "npm run docs:clean && npm run docs:build && cp CNAME docs && cd docs && git init && git commit --allow-empty -m 'update docs' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update docs' && git push git@github.com:zhenwenc/jslib gh-pages --force",
-    "prepublish": "npm run build && babel dist/src -s --presets babel-preset-es2015 --out-dir lib && rsync -avm --include='*.d.ts' -f 'hide,! */' dist/src/ lib && cp typings-ext.d.ts lib",
-    "publishLocal": "npm pack"
+    "docs:publish": "npm run docs:clean && npm run docs:build && cp CNAME docs && cd docs && git init && git commit --allow-empty -m 'update docs' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update docs' && git push git@github.com:zhenwenc/jslib gh-pages --force"
   },
   "repository": {
     "type": "git",
