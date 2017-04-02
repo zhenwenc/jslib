@@ -1,5 +1,5 @@
 {
-  "name": "tsfp",
+  "name": "jslib",
   "version": "0.1.16",
   "publishConfig": {
     "tag": "next"
@@ -27,16 +27,15 @@
     "docs": "npm run docs:clean && npm run docs:build",
     "docs:clean": "rimraf doc",
     "docs:build": "typedoc --out docs --options typedoc.json --exclude '**/*.spec.ts' ./src/",
-    "docs:publish": "npm run docs:clean && npm run docs:build && cp CNAME docs && cd docs && git init && git commit --allow-empty -m 'update docs' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update docs' && git push git@github.com:zhenwenc/tsfp gh-pages --force",
+    "docs:publish": "npm run docs:clean && npm run docs:build && cp CNAME docs && cd docs && git init && git commit --allow-empty -m 'update docs' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update docs' && git push git@github.com:zhenwenc/jslib gh-pages --force",
     "prepublish": "npm run build && babel dist/src -s --presets babel-preset-es2015 --out-dir lib && rsync -avm --include='*.d.ts' -f 'hide,! */' dist/src/ lib && cp typings-ext.d.ts lib",
     "publishLocal": "npm pack"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/zhenwenc/tsfp.git"
+    "url": "https://github.com/zhenwenc/jslib.git"
   },
   "keywords": [
-    "tsfp",
     "typescript",
     "functional",
     "immutable"
@@ -44,12 +43,12 @@
   "author": "Zhenwen Cai <frederickcai@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/zhenwenc/tsfp/issues"
+    "url": "https://github.com/zhenwenc/jslib/issues"
   },
-  "homepage": "http://tsfp.js.org",
+  "homepage": "https://zhenwenc.github.io/jslib/",
   "devDependencies": {
     "@types/chai": "^3.4.29",
-    "@types/lodash": "0.0.28",
+    "@types/lodash": "4.14.61",
     "@types/mocha": "^2.2.28",
     "babel-cli": "^6.11.4",
     "babel-core": "^6.11.4",
@@ -57,11 +56,12 @@
     "chai": "^3.5.0",
     "immutable": "^3.8.1",
     "lodash": "^4.13.1",
-    "mocha": "^2.5.3",
-    "should": "^10.0.0",
-    "ts-node": "^1.0.0",
-    "tslint": "^3.13.0",
-    "typedoc": "^0.4.4",
+    "mocha": "^3.2.0",
+    "rimraf": "^2.6.1",
+    "should": "^11.2.1",
+    "ts-node": "^3.0.2",
+    "tslint": "^5.0.0",
+    "typedoc": "^0.5.9",
     "typescript": "^2.1.0-dev.20160719"
   }
 }

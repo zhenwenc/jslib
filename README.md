@@ -1,13 +1,15 @@
-# TSFP
+# JSLib
 
 A collection of functional utility libraries for TS/JS projects!
+
+*WARNING*: This library is only used in my own projects, but PRs, reporting issues and suggestions are welcome!
 
 ## Installation
 
 To install the latest version:
 
 ```bash
-$ npm install --save-dev tsfp
+$ npm install --save-dev zhenwenc/jslib
 ```
 
 Most likely you'll also need [the Immutable.js](https://github.com/facebook/immutable-js) library.
@@ -18,20 +20,19 @@ $ npm install --save-dev immutable
 
 ## Documentation
 
-[Read the docs](http://tsfp.js.org) and taste the FP candies!
+[Read the docs](https://zhenwenc.github.io/jslib/) and taste the FP candies!
 
 ## Contributing
 
-If you'd like to contribute to TSFP, you'll need to run the following commands to get your environment set up:
+If you'd like to contribute to JSLib, you'll need to run the following commands to get your environment set up:
 
 ```bash
-$ git clone https://github.com/zhenwenc/tsfp.git
-$ cd tsfp                   # go to the tsfp directory
+$ git clone https://github.com/zhenwenc/jslib.git
+$ cd jslib                  # go to the jslib directory
 $ npm install               # install local npm build / test dependencies
 
 # Available scripts:
 
-$ npm run typings-install   # install external type definitions
 $ npm run build             # compile typescript source code
 $ npm run test              # run all unit test suits
 $ npm run watch:test        # watch for source / test file changes
@@ -44,4 +45,4 @@ source files when a change occurs. The output files are written to the `/dist/` 
 
 ## License
 
-`TSFP` is [MIT-licensed](./LICENSE).
+`JSLib` is [MIT-licensed](./LICENSE).

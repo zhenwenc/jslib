@@ -59,7 +59,7 @@ describe('ChaiSpec', () => {
       expect(Just({ x: 'bar' })).to.eq(Just({ x: 'bar' }))
     })
     it('should check Maybe with immutable collection correctly', () => {
-      expect(Just(List[1, 2])).to.eq(Just(List[1, 2]))
+      expect(Just(List([1, 2]))).to.eq(Just(List([1, 2])))
       expect(Just(Set([1, 2]))).to.eq(Just(Set([1, 2])))
       expect(Just(Stack([1, 2]))).to.eq(Just(Stack([1, 2])))
       expect(Just(Map({ x: 'foo' }))).to.eq(Just(Map({ x: 'foo' })))

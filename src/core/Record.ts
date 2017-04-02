@@ -5,11 +5,11 @@
 import { deepEqual } from '../utils/deepEqual'
 import { Equals } from './Equals'
 
-export const IS_RECORD_SENTINEL = '@@__TSFP_RECORD__@@'
+export const IS_RECORD_SENTINEL = '@@__JSLIB_RECORD__@@'
 
 export abstract class Record implements Equals {
   // IS_RECORD_SENTINEL
-  get '@@__TSFP_RECORD__@@'() { return true }
+  get '@@__JSLIB_RECORD__@@'() { return true }
 
   /**
    * True if this and the other Record have value equality.
