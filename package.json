@@ -4,7 +4,7 @@
   "publishConfig": {
     "tag": "next"
   },
-  "description": "A collection of functional utility libraries for JS projects",
+  "description": "A collection of utility functions for TS/JS projects",
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
   "typescript": {
@@ -62,6 +62,6 @@
     "ts-node": "^3.0.2",
     "tslint": "^5.0.0",
     "typedoc": "^0.5.9",
-    "typescript": "^2.1.0-dev.20160719"
+    "typescript": "^2.2.2"
   }
 }
